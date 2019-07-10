@@ -1,0 +1,12 @@
+{
+  "examples": {
+    "dummy": "Some English dummy text.",
+    "parameters": "Hello {{name}} the current time is {{time}}.",
+    "richtext": "Hello <b>{{name}}</b> the current time is {{time}}.",
+    "plural": "There is a thing.",
+    "plural_plural": "There are {{count}} things.",
+    "gender": "It is here.",
+    "gender_male": "He is here.",
+    "gender_female": "She is here."
+  }
+}

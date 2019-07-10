@@ -1568,6 +1568,174 @@ var TextModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../libs/shared/util-core/src/index.ts":
+/*!***************************************************************************!*\
+  !*** /Users/mel/holng/dev/layout/hdms/libs/shared/util-core/src/index.ts ***!
+  \***************************************************************************/
+/*! exports provided: WindowRefService, CurrencyFormatModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _lib_window_ref_window_ref_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/window-ref/window-ref.service */ "../../libs/shared/util-core/src/lib/window-ref/window-ref.service.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "WindowRefService", function() { return _lib_window_ref_window_ref_service__WEBPACK_IMPORTED_MODULE_0__["WindowRefService"]; });
+
+/* harmony import */ var _lib_currency_format_currency_format_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib/currency-format/currency-format.module */ "../../libs/shared/util-core/src/lib/currency-format/currency-format.module.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CurrencyFormatModule", function() { return _lib_currency_format_currency_format_module__WEBPACK_IMPORTED_MODULE_1__["CurrencyFormatModule"]; });
+
+// window-ref
+
+// currency-format
+
+
+
+/***/ }),
+
+/***/ "../../libs/shared/util-core/src/lib/currency-format/currency-format.module.ts":
+/*!****************************************************************************************************************!*\
+  !*** /Users/mel/holng/dev/layout/hdms/libs/shared/util-core/src/lib/currency-format/currency-format.module.ts ***!
+  \****************************************************************************************************************/
+/*! exports provided: CurrencyFormatModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CurrencyFormatModule", function() { return CurrencyFormatModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _currency_format_pipe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./currency-format.pipe */ "../../libs/shared/util-core/src/lib/currency-format/currency-format.pipe.ts");
+
+
+
+
+var CurrencyFormatModule = /** @class */ (function () {
+    function CurrencyFormatModule() {
+    }
+    CurrencyFormatModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_currency_format_pipe__WEBPACK_IMPORTED_MODULE_3__["CurrencyFormatPipe"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"]],
+            exports: [_currency_format_pipe__WEBPACK_IMPORTED_MODULE_3__["CurrencyFormatPipe"]]
+        })
+    ], CurrencyFormatModule);
+    return CurrencyFormatModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../libs/shared/util-core/src/lib/currency-format/currency-format.pipe.ts":
+/*!**************************************************************************************************************!*\
+  !*** /Users/mel/holng/dev/layout/hdms/libs/shared/util-core/src/lib/currency-format/currency-format.pipe.ts ***!
+  \**************************************************************************************************************/
+/*! exports provided: CurrencyFormatPipe */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CurrencyFormatPipe", function() { return CurrencyFormatPipe; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var CurrencyFormatPipe = /** @class */ (function () {
+    function CurrencyFormatPipe() {
+        this.patternRegex = /^([^#]*)(#+[^#]?#*[^#]?#+)([^#]*)$/;
+    }
+    CurrencyFormatPipe_1 = CurrencyFormatPipe;
+    CurrencyFormatPipe.getIntValue = function (value, decimalPlaces) {
+        return parseInt(decimalPlaces ? value : Math.round(value), 10);
+    };
+    CurrencyFormatPipe.getDecimalPattern = function (separator, pattern) {
+        return separator ? pattern.substr(pattern.lastIndexOf(separator) + 1) : '';
+    };
+    CurrencyFormatPipe.getThousandSeparatorPos = function (value) {
+        return value.length > 3 ? value.length % 3 : 0;
+    };
+    CurrencyFormatPipe.getRoundedValue = function (value, factor) {
+        return Math.round(Math.abs(value) * factor) / factor;
+    };
+    CurrencyFormatPipe.getThousandPart = function (value, separator, separatorPos) {
+        return separatorPos ? value.substr(0, separatorPos) + separator : '';
+    };
+    CurrencyFormatPipe.getHundredPart = function (value, separator, separatorPos) {
+        return value.substr(separatorPos).replace(/(\d{3})(?=\d)/g, "$1" + separator);
+    };
+    CurrencyFormatPipe.getDecimalPart = function (value, amount, separator) {
+        return amount ? separator + value.toFixed(amount).slice(2) : '';
+    };
+    /**
+     * Transforms a numeric value to a given currency format
+     * @param {any} value - string or number
+     * @param {string} customPattern - optionally/individually applied
+     */
+    CurrencyFormatPipe.prototype.transform = function (value, customPattern) {
+        var pattern = customPattern || CurrencyFormatPipe_1.Pattern;
+        // return the input in case of invalid pattern or value
+        if (!pattern || !pattern.match(this.patternRegex) || !value || isNaN(value)) {
+            return value;
+        }
+        return pattern.replace(this.patternRegex, function (all, preFix, numeralPattern, postFix) {
+            var separators = numeralPattern.match(/[^#]+/g) || [], thousandSeparator = separators[0] || '', decimalSeparator = separators.length > 1 ? separators[1] : '', decimalPattern = CurrencyFormatPipe_1.getDecimalPattern(decimalSeparator, numeralPattern), decimalPlaces = decimalPattern ? decimalPattern.length : 0, valueInt = CurrencyFormatPipe_1.getIntValue(value, decimalPlaces), valueAbs = Math.abs(valueInt), valueAbsString = valueAbs.toString(), thousandSeparatorPos = CurrencyFormatPipe_1.getThousandSeparatorPos(valueAbsString), roundedValue = CurrencyFormatPipe_1.getRoundedValue(value, Math.pow(10, decimalPlaces)), negativeSign = valueInt < 0 ? '-' : '', thousandPart = CurrencyFormatPipe_1.getThousandPart(valueAbsString, thousandSeparator, thousandSeparatorPos), hundredPart = CurrencyFormatPipe_1.getHundredPart(valueAbsString, thousandSeparator, thousandSeparatorPos), decimalPart = CurrencyFormatPipe_1.getDecimalPart(roundedValue - valueAbs, decimalPlaces, decimalSeparator);
+            return preFix + negativeSign + thousandPart + hundredPart + decimalPart + postFix;
+        });
+    };
+    var CurrencyFormatPipe_1;
+    CurrencyFormatPipe = CurrencyFormatPipe_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Pipe"])({
+            name: 'currencyFormat'
+        })
+    ], CurrencyFormatPipe);
+    return CurrencyFormatPipe;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../libs/shared/util-core/src/lib/window-ref/window-ref.service.ts":
+/*!*******************************************************************************************************!*\
+  !*** /Users/mel/holng/dev/layout/hdms/libs/shared/util-core/src/lib/window-ref/window-ref.service.ts ***!
+  \*******************************************************************************************************/
+/*! exports provided: WindowRefService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WindowRefService", function() { return WindowRefService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+function _window() {
+    // return the global native browser window object
+    return window;
+}
+var WindowRefService = /** @class */ (function () {
+    function WindowRefService() {
+    }
+    Object.defineProperty(WindowRefService.prototype, "nativeWindow", {
+        get: function () {
+            return _window();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    WindowRefService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], WindowRefService);
+    return WindowRefService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./$$_lazy_route_resource lazy recursive":
 /*!******************************************************!*\
   !*** ./$$_lazy_route_resource lazy namespace object ***!
@@ -1591,6 +1759,69 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 
 /***/ }),
 
+/***/ "./src/app/app-routing.module.ts":
+/*!***************************************!*\
+  !*** ./src/app/app-routing.module.ts ***!
+  \***************************************/
+/*! exports provided: AppRoutingModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppRoutingModule", function() { return AppRoutingModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "../../node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _graphql_example_pages_graphql_example_graphql_example_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./graphql-example/pages/graphql-example/graphql-example.component */ "./src/app/graphql-example/pages/graphql-example/graphql-example.component.ts");
+/* harmony import */ var _home_pages_home_home_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./home/pages/home/home.component */ "./src/app/home/pages/home/home.component.ts");
+/* harmony import */ var _mock_example_mock_example_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mock-example/mock-example.component */ "./src/app/mock-example/mock-example.component.ts");
+/* harmony import */ var _window_ref_window_ref_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./window-ref/window-ref.component */ "./src/app/window-ref/window-ref.component.ts");
+/* harmony import */ var _pipes_showcase_pipes_showcase_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pipes-showcase/pipes-showcase.component */ "./src/app/pipes-showcase/pipes-showcase.component.ts");
+/* harmony import */ var _translation_translation_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./translation/translation.component */ "./src/app/translation/translation.component.ts");
+/* harmony import */ var _forms_forms_example_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./forms/forms-example.component */ "./src/app/forms/forms-example.component.ts");
+/* harmony import */ var _bootstrap_grid_usecases_bootstrap_grid_usecases_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./bootstrap-grid-usecases/bootstrap-grid-usecases.component */ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.ts");
+/* harmony import */ var _css_grid_usecases_css_grid_usecases_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./css-grid-usecases/css-grid-usecases.component */ "./src/app/css-grid-usecases/css-grid-usecases.component.ts");
+
+
+
+
+
+
+
+
+
+
+
+
+var routes = [
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'home', component: _home_pages_home_home_component__WEBPACK_IMPORTED_MODULE_4__["HomeComponent"] },
+    { path: 'graphql-example', component: _graphql_example_pages_graphql_example_graphql_example_component__WEBPACK_IMPORTED_MODULE_3__["GraphqlExampleComponent"] },
+    { path: 'mock-example', component: _mock_example_mock_example_component__WEBPACK_IMPORTED_MODULE_5__["MockExampleComponent"] },
+    { path: 'window-ref', component: _window_ref_window_ref_component__WEBPACK_IMPORTED_MODULE_6__["WindowRefComponent"] },
+    { path: 'pipes-showcase', component: _pipes_showcase_pipes_showcase_component__WEBPACK_IMPORTED_MODULE_7__["PipesShowcaseComponent"] },
+    { path: 'translation', component: _translation_translation_component__WEBPACK_IMPORTED_MODULE_8__["TranslationComponent"] },
+    { path: 'forms-example', component: _forms_forms_example_component__WEBPACK_IMPORTED_MODULE_9__["FormsExampleComponent"] },
+    { path: 'bootstrap-grid-usecases', component: _bootstrap_grid_usecases_bootstrap_grid_usecases_component__WEBPACK_IMPORTED_MODULE_10__["BootstrapGridUsecasesComponent"] },
+    { path: 'css-grid-usecases', component: _css_grid_usecases_css_grid_usecases_component__WEBPACK_IMPORTED_MODULE_11__["CssGridUsecasesComponent"] }
+];
+var AppRoutingModule = /** @class */ (function () {
+    function AppRoutingModule() {
+    }
+    AppRoutingModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forRoot(routes)],
+            declarations: [],
+            exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]]
+        })
+    ], AppRoutingModule);
+    return AppRoutingModule;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/app.component.html":
 /*!************************************!*\
   !*** ./src/app/app.component.html ***!
@@ -1598,7 +1829,18 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- TEXT COMPONENT -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-uppercase text-red\">Text component</h3>\n\n          <ui-core-text>\n            <span content>\n              Simple\n              <strong>text</strong>\n              component\n            </span>\n            <ui-core-svg-icon icon-before icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-1 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-2 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-3 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-text>\n\n          <ui-core-text>\n            <span content>\n              Simple\n              <strong>text</strong>\n              component\n            </span>\n            <ui-core-svg-icon icon-before icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-1 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-2 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-3 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-text>\n\n          <ui-core-text contentClasses=\"text-white\" bgColor=\"bg-primary\" class=\"mb-2\">\n            <span content>\n              Simple\n              <strong>text</strong>\n              component\n            </span>\n            <ui-core-svg-icon icon-before icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-1 icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-2 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-3 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-text>\n        </div>\n\n        <div class=\"box bg-disabled d-flex align-items-center bl-h-10\">\n          <ui-core-text class=\"my-0\">\n            <span content>\n              Simple\n              <strong>text</strong>\n              component\n            </span>\n            <ui-core-svg-icon icon-before icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-1 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-2 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <ui-core-svg-icon icon-after-3 icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-text>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- LIST STYLES -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p class=\"mb-0\">Some copy. Some copy for reference. Some copy. Some copy for reference.</p>\n          <ul>\n            <li>Some text</li>\n            <li>Some text that goes beyond two lines</li>\n          </ul>\n\n          <h4 class=\"heading-sm text-bold mb-0\">Heading reference</h4>\n          <ul>\n            <li>Some text</li>\n            <li>Some text that goes beyond two lines</li>\n          </ul>\n          <ul>\n            <li>\n              Bullet can have\n              <a href=\"#\">link</a>\n              or\n              <strong>bold</strong>\n              or\n              <em>italic</em>\n              inside it\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p class=\"mb-0\">Some copy. Some copy for reference. Some copy. Some copy for reference.</p>\n          <ol>\n            <li>Some text</li>\n            <li>Some text that goes beyond two lines</li>\n          </ol>\n\n          <h4 class=\"heading-sm text-bold mb-0\">Heading reference</h4>\n          <ol>\n            <li>Some text</li>\n            <li>Some text that goes beyond two lines</li>\n          </ol>\n          <ol>\n            <li>\n              Bullet can have\n              <a href=\"#\">link</a>\n              or\n              <strong>bold</strong>\n              or\n              <em>italic</em>\n              inside it\n            </li>\n          </ol>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container height -->\n<div class=\"container-fluid bg-secondary bl-h-10 bl-h-md-5\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            <strong>\n              box within 48 column which is 10 lines high on xs upwards and 5 high md upwards\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container height overflow hidden -->\n<div class=\"container-fluid bg-success bl-h-20 bl-h-md-10\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            <strong>\n              box within 48 column which is 20 lines high on xs upwards and 10 high md upwards (overfow hidden) default\n            </strong>\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container height overflow auto -->\n<div class=\"container-fluid bg-success bl-h-20 bl-h-md-10 overflow-auto\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            <strong>\n              box within 48 column which is 20 lines high on xs upwards and 10 high md upwards with overflow auto\n            </strong>\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- box height -->\n<div class=\"container-fluid \">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box bg-secondary bl-h-10 bl-h-md-5\">\n          <p>\n            <strong>\n              box which is 10 lines high on xs upwards and 5 high md upwards within 48 column\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- box height overflow hidden -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box bg-success bl-h-20 bl-h-md-10\">\n          <p>\n            <strong>\n              box which is 20 lines high on xs upwards and 10 high md upwards (overfow hidden) default within 48 column\n            </strong>\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- box height overflow auto -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box  bg-success bl-h-20 bl-h-md-10 overflow-auto\">\n          <p>\n            <strong>\n              box which is 20 lines high on xs upwards and 10 high md upwards with overflow auto within 48 column\n            </strong>\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n            new line\n            <br />\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container height -->\n<div class=\"container-fluid bg-secondary bl-h-10 bl-h-md-5\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            <strong>\n              box within 48 column which is 10 lines high on xs upwards and 5 high md upwards\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container - box relation -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p><strong>box within 48 column</strong></p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p><strong>box with background within 48 column</strong></p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>\n            <strong>\n              2 boxes with background within 48 column (box 1) no width definitions\n            </strong>\n          </p>\n        </div>\n        <div class=\"box bg-secondary\">\n          <p>\n            <strong>\n              2 boxes with background within 48 column (box 2) no width definitions\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container - box width -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box box-w-1-2 bg-disabled\">\n          <p>50% box</p>\n        </div>\n\n        <div class=\"box box-w-1-2 bg-disabled\">\n          <p>50% box</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>100% box</p>\n        </div>\n        <div class=\"box box-w-1-2 bg-disabled\">\n          <p>50% box</p>\n        </div>\n        <div class=\"box box-w-1-4 bg-disabled\">\n          <p>25% box</p>\n        </div>\n        <div class=\"box box-w-1-4 bg-disabled\">\n          <p>25% box</p>\n        </div>\n        <div class=\"box box-w-1-3 bg-disabled\">\n          <p>1/3 box</p>\n        </div>\n        <div class=\"box box-w-2-3 bg-secondary\">\n          <p>2/3 box</p>\n        </div>\n        <div class=\"box box-w-1-6 bg-disabled\">\n          <p>1/6 box</p>\n        </div>\n        <div class=\"box box-w-1-6 bg-info\">\n          <p>1/6 box</p>\n        </div>\n        <div class=\"box box-w-1-6 bg-success\">\n          <p>1/6 box</p>\n        </div>\n        <div class=\"box box-w-1-6 bg-warning\">\n          <p>1/6 box</p>\n        </div>\n        <div class=\"box box-w-1-6 bg-danger\">\n          <p>1/6 box</p>\n        </div>\n        <div class=\"box box-w-1-6 bg-dark\">\n          <p>1/6 box</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container - dynamic boxes -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group flex-nowrap\">\n        <div class=\"box box-w-content bg-disabled\">\n          <p>\n            fit to content box\n            <br />\n            can occur only within column with flex-nowrap\n          </p>\n        </div>\n        <div class=\"box bg-warning\">\n          <p>fill up box - default behaviour without width in a nowrap column</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-48\">\n      <div class=\"box-group flex-nowrap\">\n        <div class=\"box box-w-1-6 bg-disabled\">\n          <p>1/6 box</p>\n        </div>\n        <div class=\"box bg-warning\">\n          <p>fill up box - default behaviour without width in a nowrap column</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container backgrounds -->\n<div class=\"container-fluid bg-secondary\">\n  <div class=\"row\">\n    <div class=\"col-24\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>\n            <strong>\n              box with background within a 24 col in a container fluid with background\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- container backgrounds -->\n<div class=\"container-fluid bg-image\">\n  <div class=\"bg-image-container\">\n    <img\n      alt=\"this is a placeholder\"\n      src=\"https://www.hilti.de/content/hilti/E3/DE/de/homepage/jcr:content/teaserSet3ItemsWrapper/defaultVariant/teaser2.img.1920.medium.jpg/1557213898681.jpg\"\n    />\n  </div>\n  <div class=\"row\">\n    <div class=\"col-24 offset-24\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>\n            <strong>\n              box with background within a 24 col with 24 offset in a container fluid with background image\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- TEXT & COLORS -->\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box py-0 my-0\">\n          <p><strong>Boxes with Background</strong></p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <!-- paddings -->\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>Box with bg-disabled</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>Box without background</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box bg-image\">\n          <div class=\"bg-image-container\">\n            <img\n              alt=\"this is a placeholder\"\n              src=\"https://www.hilti.de/content/hilti/E3/DE/de/homepage/jcr:content/teaserSet3ItemsWrapper/defaultVariant/teaser2.img.1920.medium.jpg/1557213898681.jpg\"\n            />\n          </div>\n          <div class=\"position-relative\">\n            <p>\n              Box with image background - image rules apply TBD - required an additional relative container\n            </p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box py-0 my-0\">\n          <p><strong>Boxes - Padding (bg-disabled applied to boxes)</strong></p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <!-- paddings -->\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>\n            Default box:\n            <strong>box</strong>\n            <br />\n            0 padding (default),\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box py-0 bg-disabled\">\n          <p>\n            Box:\n            <strong>box py-0</strong>\n            <br />\n            0 padding,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box py-1 bg-disabled\">\n          <p>\n            Box:\n            <strong>box py-1</strong>\n            <br />\n            1 padding,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box py-2 bg-disabled\">\n          <p>\n            Box:\n            <strong>box py-2</strong>\n            <br />\n            2 padding,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box pt-1 bg-disabled\">\n          <p>\n            Box:\n            <strong>box pt-1</strong>\n            <br />\n            1 padding top,\n            <br />\n            0 padding bottom,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box pt-2 bg-disabled\">\n          <p>\n            Box:\n            <strong>box pt-2</strong>\n            <br />\n            2 padding top,\n            <br />\n            0 padding bottom,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box pb-1 bg-disabled\">\n          <p>\n            Box:\n            <strong>box pb-1</strong>\n            <br />\n            0 padding top,\n            <br />\n            1 padding bottom,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box pb-2 bg-disabled\">\n          <p>\n            Box:\n            <strong>box pb-2</strong>\n            <br />\n            0 padding top,\n            <br />\n            2 padding bottom,\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"container-fluid\">\n  <!-- margins -->\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box py-0 my-0\">\n          <p><strong>Boxes - Margins (bg-disabled applied to boxes)</strong></p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"container-fluid bg-info\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>\n            Default box:\n            <strong>box</strong>\n            <br />\n            0 padding (default),\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box mb-4 bg-disabled\">\n          <p>\n            Box:\n            <strong>box mb-4</strong>\n            <br />\n            0 padding (default),\n            <br />\n            4 margin bottom,\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box mb-2 bg-disabled\">\n          <p>\n            Box:\n            <strong>box mb-2</strong>\n            <br />\n            0 padding (default),\n            <br />\n            2 margin bottom,\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box mb-1 bg-disabled\">\n          <p>\n            Box:\n            <strong>box mb-1</strong>\n            <br />\n            0 padding (default),\n            <br />\n            1 margin,\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"container-fluid bg-info\">\n  <!-- borders -->\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group\">\n        <div class=\"box py-0 my-0\">\n          <p>\n            <strong>\n              Boxes - Borders\n              <br />\n              It is not allowed to combine 0 padding (y/t/b) with border!\n              <br />\n              bg-disabled applied to boxes\n            </strong>\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled\">\n          <p>\n            Default box:\n            <strong>box</strong>\n            <br />\n            0 padding (default),\n            <br />\n            0 margin (default),\n            <br />\n            0 border (default)\n          </p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box border border-primary bg-disabled\">\n          <p>\n            Default box:\n            <strong>box border</strong>\n            <br />\n            0 padding (default),\n            <br />\n            0 margin (default),\n            <br />\n            1 border\n          </p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box py-1 border border-primary bg-disabled\">\n          <p>\n            Box:\n            <strong>box py-1 border</strong>\n            <br />\n            1 padding,\n            <br />\n            0 margin (default),\n            <br />\n            1 border\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-uppercase text-red\">Core text rules</h3>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-20\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-lg\">Heading Large</h1>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-14\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-md\">Heading Medium</h1>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-14\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-sm\">Heading Small</h1>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-20\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-lg text-uppercase text-red\">\n            Heading Large Marketing\n          </h1>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-14\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-md text-bold text-burgundy\">Heading Marketing 2</h1>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-14\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-md text-uppercase text-red\">Heading Utility</h1>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-20\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            Text Regular/Body &mdash; Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam doloribus aut est\n            delectus voluptatum natus placeat eveniet magnam asperiores laborum molestias magni commodi et id quis sit,\n            eum nulla quam.\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"offset-4 col-16\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <small class=\"text-sm\">\n            DO NOT USE &lt;small&gt; TAG NESTED AND WITHOUT CLASS\n            <br />\n            Sub-Text &mdash; Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam doloribus aut est delectus\n            voluptatum natus.\n          </small>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-20\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <div class=\"text\">\n            <strong>\n              Text bold/Body bold &mdash; Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam doloribus aut\n              est delectus voluptatum natus placeat eveniet magnam asperiores laborum molestias magni commodi et id quis\n              sit, eum nulla quam.\n            </strong>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"offset-4 col-16\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <div class=\"text text-sm\">\n            <strong>\n              Sub-Text Bold &mdash; Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam doloribus aut est\n              delectus voluptatum natus.\n            </strong>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- COLORS -->\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-uppercase text-red\">Colors</h3>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-primary text-light\">\n          <p>\n            <strong>Primary</strong>\n            <br />\n            Red #d2051e\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-secondary text-light\">\n          <p>\n            <strong>Secondary</strong>\n            <br />\n            Burgundy #671a3d\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-dark text-light\">\n          <p>\n            <strong>Dark</strong>\n            <br />\n            Steel 100% #524f53\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-light text-dark border\">\n          <p>\n            <strong>Light</strong>\n            <br />\n            White #ffffff\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-neutral-light text-light\">\n          <p>\n            <strong>Neutral light</strong>\n            <br />\n            Warm Concrete 100% #d7cebd\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-neutral-dark text-light\">\n          <p>\n            <strong>Neutral dark</strong>\n            <br />\n            Heavy Concrete 100% #887f6e\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled text-light\">\n          <p>\n            <strong>Disabled</strong>\n            <br />\n            Steel 40% #bab9ba\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box border border-primary text-dark\">\n          <p>\n            .border-primary\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box border border-secondary text-dark\">\n          <p>\n            .border-secondary\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box border border-dark text-dark\">\n          <p>\n            .border-dark\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled border-light text-light\">\n          <p>\n            .border-light\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box border border-neutral-light text-dark\">\n          <p>\n            .border-neutral-light\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box border border-neutral-dark text-dark\">\n          <p>\n            .border-neutral-dark\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box border border-disabled text-dark\">\n          <p>\n            .border-disabled\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box text-primary\">\n          <p>\n            .text-primary\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box text-secondary\">\n          <p>\n            .text-secondary\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box text-dark\">\n          <p>\n            .text-dark\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box bg-disabled text-light\">\n          <p>\n            .text-light\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box text-neutral-light\">\n          <p>\n            .text-neutral-light\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box text-neutral-dark\">\n          <p>\n            .text-neutral-dark\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24 col-sm-16 col-md-12 mb-1\">\n      <div class=\"box-group\">\n        <div class=\"box text-disabled\">\n          <p>\n            .text-disabled\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- ICON SYSTEM -->\n<div class=\"container-fluid mt-2\">\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-uppercase text-red\">Icon system</h3>\n          <div class=\"bl-h-10\">\n            <ui-core-svg-icon icon=\"arrow_down\" width=\"32\"></ui-core-svg-icon>\n            <ui-core-svg-icon\n              icon=\"clock\"\n              classes=\"custom-class fill-red\"\n              width=\"48\"\n              title=\"ARIA friendly title\"\n            ></ui-core-svg-icon>\n\n            <ui-core-svg-icon icon=\"search\" width=\"72\"></ui-core-svg-icon>\n          </div>\n          <p>\n            Some text with icon\n            <ui-core-svg-icon icon=\"arrow_down\" verticalAlign=\"middle\"></ui-core-svg-icon>\n          </p>\n          <p>\n            Another text with icon\n            <ui-core-svg-icon icon=\"clock\" verticalAlign=\"middle\"></ui-core-svg-icon>\n          </p>\n          <button class=\"btn btn-primary mr-2\">\n            Search\n            <ui-core-svg-icon icon=\"search\" verticalAlign=\"middle\"></ui-core-svg-icon>\n          </button>\n          <button class=\"btn btn-secondary\">\n            Dropdown\n            <ui-core-svg-icon icon=\"arrow_down\" verticalAlign=\"middle\"></ui-core-svg-icon>\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- FORM STYLES -->\n<div class=\"container-fluid mt-5\">\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-uppercase text-red\">Form styles</h3>\n        </div>\n      </div>\n    </div>\n  </div>\n  <form>\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label for=\"inputA\" class=\"mb-0\">Input Label Top</label>\n            <input\n              type=\"text\"\n              class=\"form-control\"\n              id=\"inputA\"\n              aria-describedby=\"emailHelp\"\n              placeholder=\"Placeholder text\"\n            />\n            <small id=\"emailHelp\" class=\"form-text text-neutral-dark mt-0\">\n              Input subtext default\n            </small>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"text-disabled mb-0\" for=\"inputB\">\n              Input Label Top Disabled\n            </label>\n            <input type=\"text\" class=\"form-control\" id=\"inputB\" placeholder=\"Placeholder text\" disabled />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\" for=\"inputC\">Input Label Top Error</label>\n            <input type=\"text\" class=\"form-control is-invalid\" id=\"inputC\" placeholder=\"Placeholder text\" />\n            <div class=\"invalid-feedback mt-0\">\n              Input Inline Error\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n\n  <!-- horizontal form -->\n  <form>\n    <div class=\"form-group row\">\n      <label for=\"inputEmail3\" class=\"col-sm-16 mb-0 mt-0\">\n        <div class=\"box-group\">\n          <div class=\"box\">Input Label Left</div>\n        </div>\n      </label>\n      <div class=\"col col-sm-32\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <input type=\"email\" class=\"form-control\" id=\"inputEmail3\" value=\"Typed text\" />\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"form-group row\">\n      <label for=\"inputPassword3\" class=\"text-disabled col-sm-16 mb-0 mt-0\">\n        <div class=\"box-group\">\n          <div class=\"box\">Input Label Left Disabled</div>\n        </div>\n      </label>\n      <div class=\"col col-sm-32\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <input type=\"password\" class=\"form-control\" id=\"inputPassword3\" placeholder=\"Placeholder text\" disabled />\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"form-group row\">\n      <div class=\"col col-md-24\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <h3 class=\"heading-sm text-red\">Radios</h3>\n            <div class=\"custom-control custom-radio\">\n              <input type=\"radio\" id=\"customRadio1\" name=\"customRadio\" class=\"custom-control-input\" />\n\n              <label class=\"custom-control-label\" for=\"customRadio1\">\n                Radio value default\n              </label>\n            </div>\n            <div class=\"custom-control custom-radio\">\n              <input type=\"radio\" id=\"customRadio2\" name=\"customRadio\" class=\"custom-control-input\" checked />\n              <label class=\"custom-control-label\" for=\"customRadio2\">\n                Radio value active\n              </label>\n            </div>\n            <div class=\"custom-control custom-radio\">\n              <input type=\"radio\" id=\"customRadio3\" name=\"customRadioDisabled\" class=\"custom-control-input\" disabled />\n              <label class=\"custom-control-label\" for=\"customRadio3\">\n                Radio value disabled\n              </label>\n            </div>\n            <div class=\"custom-control custom-radio\">\n              <input\n                type=\"radio\"\n                id=\"customRadio4\"\n                name=\"customRadioDisabled\"\n                class=\"custom-control-input\"\n                checked\n                disabled\n              />\n              <label class=\"custom-control-label\" for=\"customRadio4\">\n                Radio value active disabled\n              </label>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"col col-md-24\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <h3 class=\"heading-sm text-red\">Checkboxes</h3>\n            <div class=\"custom-control custom-checkbox\">\n              <input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck1\" />\n\n              <label class=\"custom-control-label\" for=\"customCheck1\">\n                Checkbox value default\n              </label>\n            </div>\n            <div class=\"custom-control custom-checkbox\">\n              <input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck2\" checked />\n\n              <label class=\"custom-control-label\" for=\"customCheck2\">\n                Checkbox value active\n              </label>\n            </div>\n            <div class=\"custom-control custom-checkbox\">\n              <input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheck2Disabled\" disabled checked />\n\n              <label class=\"custom-control-label\" for=\"customCheck2Disabled\">\n                Checkbox value active disabled\n              </label>\n            </div>\n            <div class=\"custom-control custom-checkbox\">\n              <input type=\"checkbox\" class=\"custom-control-input\" id=\"customCheckDisabled\" disabled />\n              <label class=\"custom-control-label\" for=\"customCheckDisabled\">\n                Checkbox value disabled\n              </label>\n            </div>\n            <div class=\"custom-control custom-checkbox\">\n              <input type=\"checkbox\" class=\"custom-control-input is-invalid\" id=\"customCheckError\" required />\n              <label class=\"custom-control-label\" for=\"customCheckError\">\n                Checkbox value error\n              </label>\n              <div class=\"invalid-feedback\">\n                Error - required field.\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n\n<!-- INPUT FIELD COMPONENT -->\n<div class=\"container-fluid mt-5\">\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-uppercase text-red\">Form components</h3>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <form #form=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(form)\">\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\" for=\"input1\">Input Field (input1)</label>\n            <ui-core-input-field\n              name=\"input1\"\n              inputId=\"input1\"\n              placeholder=\"Placeholder input1\"\n              [(ngModel)]=\"formData.input1.value\"\n              [disabled]=\"formData.input1.disabled\"\n            ></ui-core-input-field>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <span class=\"btn btn-primary mt-2\" (click)=\"formData.input1.disabled = !formData.input1.disabled\">\n              Toggle input1 disabled\n            </span>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"form-group row\">\n      <label class=\"col-sm-16 mb-0 mt-0\" for=\"input2\">\n        <div class=\"box-group\">\n          <div class=\"box\">Input Field (input2)</div>\n        </div>\n      </label>\n      <div class=\"col-sm-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <ui-core-input-field\n              name=\"input2\"\n              inputId=\"input2\"\n              placeholder=\"Placeholder input2\"\n              [(ngModel)]=\"formData.input2.value\"\n              [disabled]=\"formData.input2.disabled\"\n            ></ui-core-input-field>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-sm-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <span class=\"btn btn-primary mt-0\" (click)=\"formData.input2.disabled = !formData.input2.disabled\">\n              Toggle input2 disabled\n            </span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n<div class=\"container-fluid\">\n  <form #form=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(form)\">\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\" for=\"textarea1\">Textarea (textarea1)</label>\n            <ui-core-textarea\n              name=\"textarea1\"\n              inputId=\"textarea1\"\n              placeholder=\"Placeholder textarea1\"\n              [(ngModel)]=\"formData.textarea1.value\"\n              [disabled]=\"formData.textarea1.disabled\"\n              rows=\"5\"\n              resizable=\"false\"\n              expandOnFocus=\"true\"\n              maxlength=\"20\"\n              labelCharsLeft=\"{0} characters remaining\"\n            ></ui-core-textarea>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <span class=\"btn btn-primary mt-2\" (click)=\"formData.textarea1.disabled = !formData.textarea1.disabled\">\n              Toggle textarea1 disabled\n            </span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n<div class=\"container-fluid\">\n  <form #form=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(form)\">\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\">Checkboxes (checkbox1 + checkbox2)</label>\n            <ui-core-checkbox\n              name=\"checkbox1\"\n              inputId=\"checkbox1\"\n              [(ngModel)]=\"formData.checkbox1.value\"\n              [disabled]=\"formData.checkbox1.disabled\"\n            >\n              Checkbox 1 label\n            </ui-core-checkbox>\n            <ui-core-checkbox\n              name=\"checkbox2\"\n              inputId=\"checkbox2\"\n              [(ngModel)]=\"formData.checkbox2.value\"\n              [disabled]=\"formData.checkbox2.disabled\"\n            >\n              Checkbox 2 label\n            </ui-core-checkbox>\n            <span class=\"btn btn-primary mt-0\" (click)=\"formData.checkbox1.disabled = !formData.checkbox1.disabled\">\n              Toggle checkbox1 disabled\n            </span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n<div class=\"container-fluid\">\n  <form #form=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(form)\">\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <div class=\"col col-md-24\">\n              <label class=\"mb-0\">Radio (radio1)</label>\n              <ui-core-radiobutton\n                name=\"radio1\"\n                value=\"one\"\n                inputId=\"radio1-1\"\n                [(ngModel)]=\"formData.radio1.value\"\n                [disabled]=\"formData.radio1.disabled\"\n              >\n                Radio one\n              </ui-core-radiobutton>\n              <ui-core-radiobutton\n                name=\"radio1\"\n                value=\"two\"\n                inputId=\"radio1-2\"\n                [(ngModel)]=\"formData.radio1.value\"\n                [disabled]=\"formData.radio1.disabled\"\n              >\n                Radio two\n              </ui-core-radiobutton>\n              <ui-core-radiobutton\n                name=\"radio1\"\n                value=\"three\"\n                inputId=\"radio1-3\"\n                [(ngModel)]=\"formData.radio1.value\"\n                [disabled]=\"formData.radio1.disabled\"\n              >\n                Radio three\n              </ui-core-radiobutton>\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <span class=\"btn btn-primary mt-2\" (click)=\"formData.radio1.disabled = !formData.radio1.disabled\">\n              Toggle radio1 disabled\n            </span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n<div class=\"container-fluid\">\n  <form #form=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(form)\">\n    <div class=\"row\">\n      <div class=\"form-group col-md-12\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <button class=\"btn btn-secondary mt-0\">Submit</button>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"form-group col-md-48\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <p>form data:</p>\n\n            <pre class=\"text\">{{ formData | json }}</pre>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n\n<form #formElementForm=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(formElementForm)\">\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Input Field (label top)\">\n          <ui-core-input-field\n            [(ngModel)]=\"fData.labelTop\"\n            name=\"labelTop\"\n            placeholder=\"Input placeholder\"\n            required\n          ></ui-core-input-field>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Input Field\" labelColumnClasses=\"box-w-1-3\" inputColumnClasses=\"box-w-2-3\">\n          <ui-core-input-field\n            [(ngModel)]=\"fData.labelLeft\"\n            name=\"labelLeft\"\n            placeholder=\"Input placeholder\"\n            required\n            minlength=\"10\"\n            pattern=\"[a-zA-Z]*\"\n          ></ui-core-input-field>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element\n          label=\"Your address\"\n          labelColumnClasses=\"box-w-1-3\"\n          inputColumnClasses=\"box-w-2-3\"\n          ngModelGroup=\"address\"\n        >\n          <div class=\"d-flex\">\n            <div class=\"w-25 mr-2\">\n              <ui-core-input-field\n                [(ngModel)]=\"fData.postcode\"\n                name=\"postcode\"\n                placeholder=\"Postcode\"\n                required\n                minlength=\"5\"\n                pattern=\"\\d*\"\n              ></ui-core-input-field>\n            </div>\n            <div class=\"w-75\">\n              <ui-core-input-field\n                [(ngModel)]=\"fData.city\"\n                name=\"city\"\n                placeholder=\"City\"\n                disabled\n                required\n                minlength=\"4\"\n                pattern=\"[a-zA-Z]*\"\n              ></ui-core-input-field>\n            </div>\n          </div>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-md-24\">\n        <ui-core-form-element label=\"Radio Group\">\n          <ui-core-radiobutton\n            *ngFor=\"let label of ['one', 'two', 'three', 'infinity']\"\n            [(ngModel)]=\"fData.counter\"\n            name=\"counter\"\n            [value]=\"label\"\n            required\n          >\n            {{ label }}\n          </ui-core-radiobutton>\n        </ui-core-form-element>\n      </div>\n      <div class=\"col-md-24\">\n        <ui-core-form-element label=\"Checkbox Group\">\n          <ui-core-checkbox\n            *ngFor=\"let label of ['check 1', 'check 2', 'check 3']; index as i\"\n            [(ngModel)]=\"fData['check' + i]\"\n            [name]=\"'check-' + i\"\n            uiCoreRequiredTrue\n          >\n            {{ label }}\n          </ui-core-checkbox>\n        </ui-core-form-element>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Text Area\">\n          <ui-core-textarea\n            [(ngModel)]=\"fData.message\"\n            name=\"message\"\n            rows=\"5\"\n            expandOnFocus=\"true\"\n            maxlength=\"100\"\n            labelCharsLeft=\"You got {0} chars left.\"\n            placeholder=\"Textarea placeholder\"\n            required\n          ></ui-core-textarea>\n        </ui-core-form-element>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"col-sm-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <button class=\"btn btn-secondary mt-0\">Submit</button>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-sm-32\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <p>form data:</p>\n            <pre class=\"text\">{{ formElementForm.value | json }} {{ formElementForm.valid | json }}</pre>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</form>\n<div class=\"container-fluid\">\n  <form #searchForm=\"ngForm\" novalidate (ngSubmit)=\"onSearch(searchForm)\">\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\" for=\"search_field\">Search Field</label>\n            <ui-core-search-field\n              name=\"search_field\"\n              inputId=\"search_field\"\n              placeholder=\"Search field\"\n              buttonTitle=\"Search field button\"\n            ></ui-core-search-field>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\" for=\"search_field_header\">\n              Search Field (Header variant)\n            </label>\n            <ui-core-search-field\n              headerVariant=\"true\"\n              name=\"search_field_header\"\n              inputId=\"search_field_header\"\n              placeholder=\"Search field\"\n              buttonTitle=\"Header search field button\"\n            ></ui-core-search-field>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"form-group col-md-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <label class=\"mb-0\" for=\"search_field_disabled\">\n              Search Field (Disabled)\n            </label>\n            <ui-core-search-field\n              disabled=\"true\"\n              name=\"search_field_disabled\"\n              inputId=\"search_field_disabled\"\n              placeholder=\"Search field\"\n              buttonTitle=\"Search field button\"\n            ></ui-core-search-field>\n          </div>\n        </div>\n      </div>\n    </div>\n  </form>\n</div>\n\n<!-- BUTTON STYLES -->\n<div class=\"container-fluid\">\n  <h3 class=\"heading-sm text-uppercase text-red\">Button Styles</h3>\n\n  <div class=\"row\">\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-primary has-icon-after\">\n            <span>Primary Button</span>\n            <ui-core-svg-icon icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-primary\" disabled>\n            Primary Button (Disabled)\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-outline-secondary has-icon-before\">\n            <ui-core-svg-icon icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <span>Secondary Button</span>\n          </button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-outline-secondary\" disabled>\n            Secondary Button (Disabled)\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-outline-tertiary\">Tertiary Button</button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-outline-tertiary\" disabled>\n            Tertiary Button (Disabled)\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-outline-tertiary-alt\">\n            Tertiary-Alt Button\n          </button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-outline-tertiary-alt\" disabled>\n            Tertiary-Alt Button (Disabled)\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-link\">Link Button</button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-dropdown\">\n            <span>Dropdown Button</span>\n            <ui-core-svg-icon icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <button class=\"btn btn-dropdown-alt\">Dropdown-Alt Button</button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"bg-primary py-2 px-2\">\n    <div class=\"row\">\n      <div class=\"col-10\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <button class=\"btn btn-primary-inverse\">\n              Primary Inversed Button\n            </button>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-10\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <button class=\"btn btn-primary-inverse\" disabled>\n              Primary Inversed Button (Disabled)\n            </button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- BUTTON COMPONENT -->\n<div class=\"container-fluid mt-5\">\n  <h3 class=\"heading-sm text-uppercase text-red\">Button component</h3>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-md-12 col-lg-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"primary\" [disabled]=\"formData.buttonPrimary.disabled\">\n            <ui-core-svg-icon iconBefore icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            <span label>Primary Button</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"tertiaryAlt\" (click)=\"toggleDisabled(formData.buttonPrimary)\">\n            <span label>Toggle</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-md-12 col-lg-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"secondary\" [disabled]=\"formData.buttonSecondary.disabled\">\n            <span label>Secondary Button</span>\n            <ui-core-svg-icon iconAfter icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"tertiaryAlt\" (click)=\"toggleDisabled(formData.buttonSecondary)\">\n            <span label>Toggle</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-md-12 col-lg-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"tertiary\" [disabled]=\"formData.buttonTertiary.disabled\">\n            <span label>Tertiary Button</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"tertiaryAlt\" (click)=\"toggleDisabled(formData.buttonTertiary)\">\n            <span label>Toggle</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-md-12 col-lg-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"tertiaryAlt\" [disabled]=\"formData.buttonTertiaryAlt.disabled\">\n            <span label>Tertiary Alt Button</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-24\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"tertiaryAlt\" (click)=\"toggleDisabled(formData.buttonTertiaryAlt)\">\n            <span label>Toggle</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-md-12 col-lg-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"link\" [disabled]=\"formData.buttonLink.disabled\">\n            <span label>Link Button</span>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-24 col-md-12 col-lg-10\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ui-core-button variant=\"dropdown\" [disabled]=\"formData.buttonDropdown.disabled\">\n            <span label>Dropdown Button</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box bg-primary box-w-1-2\">\n          <ui-core-button variant=\"primaryInverse\">\n            <span label>Primary Inversed Button</span>\n            <ui-core-svg-icon iconAfter icon=\"clock\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n        <div class=\"box bg-primary box-w-1-2\">\n          <ui-core-button variant=\"primaryInverse\" disabled=\"true\">\n            <span label>Primary Inversed Button (Disabled)</span>\n            <ui-core-svg-icon iconAfter icon=\"clock\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- CONTAINER STYLES -->\n<div class=\"container-fluid\">\n  <h3 class=\"heading-sm text-uppercase text-red\">Containers</h3>\n  <div class=\"panel\">\n    a panel, no special styles attached, yet.\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-48 col-sm-24 col-md-16 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h2 class=\"heading-lg\">Headline large</h2>\n          <p>\n            box within a box group\n            <br />\n            &lt;div class=\"box\"&gt; &lt;p&gt; ... &lt;/div&gt; &lt;/div&gt;\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-sm-24 col-md-16 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box bg-primary text-light\">\n          <p>\n            box within a box group with a primary (red) background:\n            <br />\n            &lt;div class=\"box bg-primary\"&gt; &lt;p&gt; ... &lt;/div&gt; &lt;/div&gt;\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-sm-24 col-md-16 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            box within a box group\n            <br />\n            &lt;div class=\"box\"&gt; &lt;p&gt; ... &lt;/div&gt; &lt;/div&gt;\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-sm-24 col-md-16 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box border border-red\">\n          <p>\n            box within a box group and a red border:\n            <br />\n            &lt;div class=\"box border border-color-red\"&gt; &lt;p&gt; ... &lt;/div&gt; &lt;/div&gt;\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-md-16 col-lg-8\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-16 col-lg-8</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-md-16 col-lg-8\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-16 col-lg-8</p>\n          <p>\n            Something in another &lt;p&gt;\n            <br />\n            some linewrap\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-md-16 col-lg-8\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-16 col-lg-8</p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-48 col-md-24 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-24 col-lg-12</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-md-24 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-24 col-lg-12</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-md-24 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-24 col-lg-12</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48 col-md-24 col-lg-12\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>col-48 col-md-24 col-lg-12</p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel sagittis ligula. Suspendisse ut eros\n            et leo tempus commodo. Donec gravida nulla ultrices, porta neque ac, varius mi. Vestibulum id libero tempus,\n            sagittis nisi id, tempus massa. Suspendisse pulvinar, nisl ac porta laoreet, tellus neque placerat sem,\n            luctus tempus magna sem eget ante. Nullam sit amet nisi id mauris ultrices congue at at tortor. Orci varius\n            natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas non porttitor sapien.\n            Phasellus semsem, lobortis eget ante sit amet, posuere pharetra metus. Aenean eleifend enim sem, a faucibus\n            quam semper ut. Etiam faucibus vestibulum metus gravida condimentum. Curabitur ultricies, justo at dictum\n            euismod, lectus est placerat arcu, eget pretium orci purus in lectus. Ut et dui augue. Praesent congue\n            pharetra felis. Aenean sednisl\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48\">\n      <!--The content below is only a placeholder and can be replaced.-->\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h1 class=\"heading-lg\">Welcome to {{ title }}!</h1>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>\n            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel sagittis ligula. Suspendisse ut eros\n            et leo tempus commodo. Donec gravida nulla ultrices, porta neque ac, varius mi. Vestibulum id libero tempus,\n            sagittis nisi id, tempus massa. Suspendisse pulvinar, nisl ac porta laoreet, tellus neque placerat sem,\n            luctus tempus magna sem eget ante. Nullam sit amet nisi id mauris ultrices congue at at tortor. Orci varius\n            natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas non porttitor sapien.\n            Phasellus semsem, lobortis eget ante sit amet, posuere pharetra metus. Aenean eleifend enim sem, a faucibus\n            quam semper ut. Etiam faucibus vestibulum metus gravida condimentum. Curabitur ultricies, justo at dictum\n            euismod, lectus est placerat arcu, eget pretium orci purus in lectus. Ut et dui augue. Praesent congue\n            pharetra felis. Aenean sednisl\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-48\">\n      <!-- NG Bootstrap test -->\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <ngb-alert [dismissible]=\"false\" type=\"success\">\n            <p>\n              <strong>Warning!</strong>\n              Better check yourself, you're not looking too good.\n            </p>\n          </ngb-alert>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col col-48\">\n      <!-- NG Bootstrap grid test -->\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"mb-2 heading-sm\">Grid system</h3>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"col col-16\">\n      <div class=\"box-group\">\n        <div class=\"box bl-h-15 bg-primary text-light\">\n          <h2 class=\"heading-md\">Headline 2</h2>\n          <p>\n            box 1\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-16\">\n      <div class=\"box-group\">\n        <div class=\"box bl-h-15 bg-neutral-light\">\n          <h3 class=\"heading-sm\">Headline 3</h3>\n          <p>\n            box 2\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-8\">\n      <div class=\"box-group\">\n        <div class=\"box bl-h-15 bg-neutral-light\">\n          <p>\n            box 3\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col col-8\">\n      <div class=\"box-group\">\n        <div class=\"box bl-h-15 bg-neutral-light\">\n          <p>\n            box 4\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid bg-primary text-light py-1 mb-2\">\n  <div class=\"row\">\n    <div class=\"col\">\n      <div class=\"box-group\">\n        <div class=\"box bg-secondary\">\n          <p>box 1</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>box 2</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>box 3</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <p>box 4</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid bg-primary text-light py-1 mb-2\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box py-1\">\n          <p>box 1 - Lorem ipsum dolor sit amet</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-36\">\n      <div class=\"box-group\">\n        <div class=\"box bg-secondary py-1 mb-1\">\n          <p>box 2.1</p>\n        </div>\n        <div class=\"box bg-secondary text-light py-1\">\n          <p>\n            box 2.2 - Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, sapiente.\n          </p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div class=\"container-fluid bg-primary text-light py-1 mb-2\">\n  <div class=\"row\">\n    <div class=\"col-12 mb-2\">\n      <div class=\"box-group\">\n        <div class=\"box py-1\">\n          <p>box 1 - Lorem ipsum dolor sit amet</p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-24 mb-2\">\n      <div class=\"box-group\">\n        <div class=\"box bg-secondary py-1\">\n          <p>box 2.1</p>\n        </div>\n        <div class=\"box bg-secondary py-1\">\n          <p>\n            box 2.2 - Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, sapiente.\n          </p>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-12 mb-2\">\n      <div class=\"box-group\">\n        <div class=\"box py-1\">\n          <p>box 1 - Lorem ipsum dolor sit amet</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<nav>\n  <h3>Examples</h3>\n  <p></p>\n  <p><a routerLink=\"/graphql-example\">GraphQL</a></p>\n  <p><a routerLink=\"/mock-example\">Data Mock Structure</a></p>\n  <p><a routerLink=\"/window-ref\">Window Ref Service</a></p>\n  <p><a routerLink=\"/pipes-showcase\">Pipes Showcase</a></p>\n  <p><a routerLink=\"/translation\">Translation</a></p>\n  <p><a routerLink=\"/forms-example\">Forms Example</a></p>\n  <p><a routerLink=\"/bootstrap-grid-usecases\">Bootstrap 48-col grid use cases</a></p>\n  <p><a routerLink=\"/css-grid-usecases\">CSS Grid use cases</a></p>\n</nav>\n<div class=\"main-view\">\n  <router-outlet></router-outlet>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/app.component.scss":
+/*!************************************!*\
+  !*** ./src/app/app.component.scss ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host {\n  width: 100%;\n  display: flex;\n  flex-flow: row; }\n  :host nav {\n    width: 200px;\n    width: 12.5rem;\n    padding: 10px;\n    padding: 0.625rem;\n    border-right: 2px dashed lightgray;\n    border-right: 0.125rem dashed lightgray;\n    min-height: 100vh; }\n  :host > .main-view {\n    width: calc(100% - 200px);\n    width: calc(100% - 12.5rem);\n    padding: 10px;\n    padding: 0.625rem; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tZWwvaG9sbmcvZGV2L2xheW91dC9oZG1zL2FwcHMvZXhhbXBsZXMvc3JjL2FwcC9hcHAuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFHRSxXQUFXO0VBQ1gsYUFBYTtFQUNiLGNBQWMsRUFBQTtFQUxoQjtJQVFJLFlBUG1CO0lBT25CLGNBUG1CO0lBUW5CLGFBQWE7SUFBYixpQkFBYTtJQUNiLGtDQUFrQztJQUFsQyx1Q0FBa0M7SUFDbEMsaUJBQWlCLEVBQUE7RUFYckI7SUFlSSx5QkFBcUM7SUFBckMsMkJBQXFDO0lBQ3JDLGFBQWE7SUFBYixpQkFBYSxFQUFBIiwiZmlsZSI6ImFwcHMvZXhhbXBsZXMvc3JjL2FwcC9hcHAuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyI6aG9zdCB7XG4gICRuYXYtYmFyLXdpZHRoOiAyMDBweDtcblxuICB3aWR0aDogMTAwJTtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1mbG93OiByb3c7XG5cbiAgbmF2IHtcbiAgICB3aWR0aDogJG5hdi1iYXItd2lkdGg7XG4gICAgcGFkZGluZzogMTBweDtcbiAgICBib3JkZXItcmlnaHQ6IDJweCBkYXNoZWQgbGlnaHRncmF5O1xuICAgIG1pbi1oZWlnaHQ6IDEwMHZoO1xuICB9XG5cbiAgPiAubWFpbi12aWV3IHtcbiAgICB3aWR0aDogY2FsYygxMDAlIC0gI3skbmF2LWJhci13aWR0aH0pO1xuICAgIHBhZGRpbmc6IDEwcHg7XG4gIH1cbn1cbiJdfQ== */"
 
 /***/ }),
 
@@ -1614,87 +1856,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var svg4everybody__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! svg4everybody */ "../../node_modules/svg4everybody/dist/svg4everybody.js");
-/* harmony import */ var svg4everybody__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(svg4everybody__WEBPACK_IMPORTED_MODULE_2__);
-
 
 
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
-        this.title = 'styleguide';
-        // sample form data object to test ngModel bindings
-        this.formData = {
-            input1: {
-                value: '',
-                disabled: false
-            },
-            input2: {
-                value: '',
-                disabled: true
-            },
-            textarea1: {
-                value: '',
-                disabled: false
-            },
-            checkbox1: {
-                value: false,
-                disabled: false
-            },
-            checkbox2: {
-                value: false,
-                disabled: false
-            },
-            radio1: {
-                value: '',
-                disabled: false
-            },
-            buttonPrimary: {
-                disabled: false
-            },
-            buttonSecondary: {
-                disabled: false
-            },
-            buttonTertiary: {
-                disabled: false
-            },
-            buttonTertiaryAlt: {
-                disabled: false
-            },
-            buttonLink: {
-                disabled: false
-            },
-            buttonDropdown: {
-                disabled: false
-            }
-        };
-        this.fData = {
-            labelTop: '',
-            labelLeft: '',
-            postcode: '',
-            city: '',
-            message: '',
-            counter: '',
-            check0: false,
-            check1: false,
-            check2: false
-        };
+        this.title = 'examples';
     }
-    AppComponent.prototype.ngOnInit = function () {
-        svg4everybody__WEBPACK_IMPORTED_MODULE_2___default()();
-    };
-    AppComponent.prototype.onSubmit = function (form) {
-        console.log(form.value);
-    };
-    AppComponent.prototype.onSearch = function (form) {
-        console.log('Search callback', form.value);
-    };
-    AppComponent.prototype.toggleDisabled = function (model) {
-        model.disabled = !model.disabled;
-    };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-            selector: 'styleguide-root',
-            template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html")
+            selector: 'hdms-root',
+            template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
+            styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/app.component.scss")]
         })
     ], AppComponent);
     return AppComponent;
@@ -1717,12 +1889,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "../../node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "../../node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
-/* harmony import */ var _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @hdms/shared/ui-core */ "../../libs/shared/ui-core/src/index.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _home_home_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./home/home.module */ "./src/app/home/home.module.ts");
+/* harmony import */ var _mock_example_mock_example_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mock-example/mock-example.module */ "./src/app/mock-example/mock-example.module.ts");
+/* harmony import */ var _graphql_example_graphql_example_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./graphql-example/graphql-example.module */ "./src/app/graphql-example/graphql-example.module.ts");
+/* harmony import */ var _window_ref_window_ref_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./window-ref/window-ref.module */ "./src/app/window-ref/window-ref.module.ts");
+/* harmony import */ var _pipes_showcase_pipes_showcase_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pipes-showcase/pipes-showcase.module */ "./src/app/pipes-showcase/pipes-showcase.module.ts");
+/* harmony import */ var _translation_translation_module__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./translation/translation.module */ "./src/app/translation/translation.module.ts");
+/* harmony import */ var _forms_forms_example_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./forms/forms-example.module */ "./src/app/forms/forms-example.module.ts");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _bootstrap_grid_usecases_bootstrap_grid_usecases_module__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./bootstrap-grid-usecases/bootstrap-grid-usecases.module */ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.module.ts");
+/* harmony import */ var _css_grid_usecases_css_grid_usecases_module__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./css-grid-usecases/css-grid-usecases.module */ "./src/app/css-grid-usecases/css-grid-usecases.module.ts");
 
 
 
+/* Components */
+
+
+
+
+
+
+
+
+/* Routing */
 
 
 
@@ -1731,13 +1921,1493 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
-            declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]],
-            imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_3__["NgbModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_4__["SvgIconModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_4__["FormModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_4__["SearchFieldModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_4__["TextModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_4__["ButtonModule"]],
+            declarations: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]],
+            imports: [
+                _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
+                _home_home_module__WEBPACK_IMPORTED_MODULE_4__["HomeModule"],
+                _graphql_example_graphql_example_module__WEBPACK_IMPORTED_MODULE_6__["GraphqlExampleModule"],
+                _mock_example_mock_example_module__WEBPACK_IMPORTED_MODULE_5__["MockExampleModule"],
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_11__["AppRoutingModule"],
+                _window_ref_window_ref_module__WEBPACK_IMPORTED_MODULE_7__["WindowRefModule"],
+                _pipes_showcase_pipes_showcase_module__WEBPACK_IMPORTED_MODULE_8__["PipeShowcaseModule"],
+                _translation_translation_module__WEBPACK_IMPORTED_MODULE_9__["TranslationModule"],
+                _forms_forms_example_module__WEBPACK_IMPORTED_MODULE_10__["FormsExampleModule"],
+                _bootstrap_grid_usecases_bootstrap_grid_usecases_module__WEBPACK_IMPORTED_MODULE_12__["BootstrapGridUsecasesModule"],
+                _css_grid_usecases_css_grid_usecases_module__WEBPACK_IMPORTED_MODULE_13__["CssGridUsecasesModule"]
+            ],
             providers: [],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.html":
+/*!********************************************************************************!*\
+  !*** ./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.html ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!-- 48-col GRID POC (BOOTSTRAP) -->\n\n<!-- header -->\n<div class=\"container-fluid bg-white border-bottom border-neutral-light\">\n  <!-- first row -->\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group flex-nowrap\">\n        <div class=\"box box-w-content mt-1 pr-1\">\n          <div class=\"img\">\n            <picture>\n              <img src=\"assets/images/logo_2016_sRGB.svg\" height=\"33\" alt=\"HILTI logo\" />\n            </picture>\n          </div>\n        </div>\n        <div class=\"box px-0 mt-1\">\n          <ui-core-search-field\n            class=\"w-75 w-xl-50\"\n            headerVariant=\"true\"\n            name=\"search_field\"\n            inputId=\"search_field\"\n            placeholder=\"\"\n            buttonTitle=\"Search field button\"\n          ></ui-core-search-field>\n        </div>\n\n        <div class=\"box box-w-content d-flex align-items-center justify-content-end pl-0\">\n          <!-- TODO: WIP - workaround, refactoring of tertiary button needed -->\n          <div class=\"text-neutral-dark\">EN</div>\n          <ui-core-button variant=\"tertiary\" buttonClasses=\"px-0 my-0 ml-2\">\n            <ui-core-svg-icon iconBefore icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-button>\n\n          <!-- TODO: WIP - workaround, refactoring of tertiary button needed -->\n          <div class=\"text-neutral-dark ml-4\">Cart</div>\n          <ui-core-button variant=\"tertiary\" buttonClasses=\"px-0 my-0 ml-2\">\n            <ui-core-svg-icon iconBefore icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-button>\n\n          <!-- TODO: WIP - workaround, refactoring of tertiary button needed -->\n          <div class=\"ml-4\">\n            <p class=\"text-neutral-dark my-0 py-0\">\n              MS UK DEMO TEST\n              <br />\n              123234235345\n            </p>\n          </div>\n          <ui-core-button variant=\"tertiary\" buttonClasses=\"px-0 my-0 ml-2\">\n            <ui-core-svg-icon iconBefore icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n  <!-- second row -->\n  <div class=\"row\">\n    <div class=\"col-48\">\n      <div class=\"box-group flex-nowrap\">\n        <div class=\"box box-w-content d-flex justify-content-start pr-0\">\n          <ui-core-button variant=\"tertiary\" buttonClasses=\"text-primary border-primary px-0 mb-1 mr-1\">\n            <ui-core-svg-icon iconBefore icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n          </ui-core-button>\n          <ui-core-button variant=\"dropdown\" buttonClasses=\"text-primary px-0 mb-1\">\n            <span label>Product Shop</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n\n        <div class=\"box pl-0 d-flex justify-content-end\">\n          <ui-core-button variant=\"dropdown\" buttonClasses=\"pr-0 mb-1\">\n            <span label>ENGINEERING</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n          <ui-core-button variant=\"dropdown\" buttonClasses=\"pr-0 mb-1\">\n            <span label>SERVICES</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n          <ui-core-button variant=\"dropdown\" buttonClasses=\"pr-0 mb-1\">\n            <span label>TOOL MAINTENANCE</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n          <ui-core-button variant=\"dropdown\" buttonClasses=\"pr-0 mb-1\">\n            <span label>ORDERS</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n          <ui-core-button variant=\"dropdown\" buttonClasses=\"pr-0 mb-1\">\n            <span label>FAVORITES</span>\n            <ui-core-svg-icon iconAfter icon=\"arrow_down\" width=\"18\"></ui-core-svg-icon>\n          </ui-core-button>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- product grid -->\n<div class=\"container-fluid bg-light-10 py-1\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <div class=\"box-group\">\n        <div class=\"box d-flex\">\n          <div class=\"nav w-100 flex-column nav-pills bg-steel-10 py-1\">\n            <h2 class=\"heading-md text-uppercase text-red px-3\">Please select</h2>\n            <a class=\"nav-link\" href=\"#\">Power tools</a>\n            <a class=\"nav-link active\" href=\"#\">Cordless tools</a>\n            <a class=\"nav-link\" href=\"#\">Measuring Tools and Scanners</a>\n            <a class=\"nav-link\" href=\"#\">Tool inserts</a>\n            <a class=\"nav-link\" href=\"#\">Direct Fastening</a>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-36\">\n      <div class=\"box-group pt-1\">\n        <div class=\"box w-100 px-0\">\n          <h2 class=\"heading-md text-uppercase text-red\">Cordless Tools</h2>\n        </div>\n        <div\n          class=\"box box-w-1-3 border shadow-sm rounded-sm mb-1 border-neutral-light d-flex flex-nowrap align-items-center\"\n        >\n          <div class=\"img w-25 mr-2\">\n            <picture>\n              <img class=\"d-block w-100\" src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <p class=\"my-0\">Hammers</p>\n        </div>\n        <div\n          class=\"box box-w-1-3 border shadow-sm rounded-sm mb-1 border-neutral-light d-flex flex-nowrap align-items-center\"\n        >\n          <div class=\"img w-25 mr-2\">\n            <picture>\n              <img class=\"d-block w-100\" src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <p class=\"my-0\">Demolition Hammers</p>\n        </div>\n        <div\n          class=\"box box-w-1-3 border shadow-sm rounded-sm mb-1 border-neutral-light d-flex flex-nowrap align-items-center\"\n        >\n          <div class=\"img w-25 mr-2\">\n            <picture>\n              <img class=\"d-block w-100\" src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <p class=\"my-0\">Rotary Hammers</p>\n        </div>\n        <div\n          class=\"box box-w-1-3 border shadow-sm rounded-sm mb-1 border-neutral-light d-flex flex-nowrap align-items-center\"\n        >\n          <div class=\"img w-25 mr-2\">\n            <picture>\n              <img class=\"d-block w-100\" src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <p class=\"my-0\">Drivers and Screwdrivers</p>\n        </div>\n        <div\n          class=\"box box-w-1-3 border shadow-sm rounded-sm mb-1 border-neutral-light d-flex flex-nowrap align-items-center\"\n        >\n          <div class=\"img w-25 mr-2\">\n            <picture>\n              <img class=\"d-block w-100\" src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <p class=\"my-0\">Drivers & Wrenches</p>\n        </div>\n        <div\n          class=\"box box-w-1-3 border shadow-sm rounded-sm mb-1 border-neutral-light d-flex flex-nowrap align-items-center\"\n        >\n          <div class=\"img w-25 mr-2\">\n            <picture>\n              <img class=\"d-block w-100\" src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <p class=\"my-0\">Saws</p>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- box with shadow container -->\n<div class=\"container-fluid bg-steel-10 py-1\">\n  <div class=\"row\">\n    <div class=\"col-8\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-primary\">Headline</h3>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-8\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-primary\">Headline</h3>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-24\">\n      <div class=\"box-group flex-nowrap bg-light shadow rounded-sm  bl-h-10\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-primary\">Headline</h3>\n        </div>\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-primary\">Headline</h3>\n        </div>\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-primary\">Headline</h3>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-8\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <h3 class=\"heading-sm text-primary\">Headline</h3>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.ts":
+/*!******************************************************************************!*\
+  !*** ./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.ts ***!
+  \******************************************************************************/
+/*! exports provided: BootstrapGridUsecasesComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BootstrapGridUsecasesComponent", function() { return BootstrapGridUsecasesComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var BootstrapGridUsecasesComponent = /** @class */ (function () {
+    function BootstrapGridUsecasesComponent() {
+    }
+    BootstrapGridUsecasesComponent.prototype.ngOnInit = function () { };
+    BootstrapGridUsecasesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'ui-core-bootstrap-grid-usecases',
+            template: __webpack_require__(/*! ./bootstrap-grid-usecases.component.html */ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], BootstrapGridUsecasesComponent);
+    return BootstrapGridUsecasesComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.module.ts":
+/*!***************************************************************************!*\
+  !*** ./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.module.ts ***!
+  \***************************************************************************/
+/*! exports provided: BootstrapGridUsecasesModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BootstrapGridUsecasesModule", function() { return BootstrapGridUsecasesModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "../../node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+/* harmony import */ var _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @hdms/shared/ui-core */ "../../libs/shared/ui-core/src/index.ts");
+/* harmony import */ var _bootstrap_grid_usecases_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./bootstrap-grid-usecases.component */ "./src/app/bootstrap-grid-usecases/bootstrap-grid-usecases.component.ts");
+
+
+
+
+
+var BootstrapGridUsecasesModule = /** @class */ (function () {
+    function BootstrapGridUsecasesModule() {
+    }
+    BootstrapGridUsecasesModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_bootstrap_grid_usecases_component__WEBPACK_IMPORTED_MODULE_4__["BootstrapGridUsecasesComponent"]],
+            imports: [_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["SvgIconModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["FormModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["SearchFieldModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["TextModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["ButtonModule"]]
+        })
+    ], BootstrapGridUsecasesModule);
+    return BootstrapGridUsecasesModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.html":
+/*!**********************************************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.html ***!
+  \**********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container-fluid bg-light-10 py-1\">\n  <div class=\"row\">\n    <div class=\"col-36\">\n      <div class=\"grid-group pt-1\">\n        <div class=\"box border shadow-sm rounded-sm mb-1 border-neutral-light align-items-center product-tile\">\n          <div class=\"image-box\">\n            <picture>\n              <img src=\"assets/images/tool.jpg\" alt=\"tool\" />\n            </picture>\n          </div>\n          <div class=\"descrip\">\n            <p class=\"text-bold\">\n              Cordless rotary hammer\n              <br />\n              TE-4 A22 case\n            </p>\n          </div>\n          <div class=\"quantity\">\n            <ui-core-input-field\n              name=\"quantity\"\n              placeholder=\"1\"\n              required\n              maxlength=\"3\"\n              pattern=\"\\d*\"\n            ></ui-core-input-field>\n          </div>\n          <div class=\"price\">\n            <p>\n              <strong>$99.999.00</strong>\n              <br />\n              Monthly for 36 months\n            </p>\n          </div>\n          <div class=\"button-box\">\n            <ui-core-button variant=\"tertiary\" buttonClasses=\"text-primary border-primary px-0 mb-1 mr-1\">\n              <ui-core-svg-icon iconBefore icon=\"clock\" width=\"18\" title=\"ARIA friendly title\"></ui-core-svg-icon>\n            </ui-core-button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.scss":
+/*!**********************************************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.scss ***!
+  \**********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/**\n * CSS grid definitions\n *\n */\n.grid-group {\n  display: grid; }\n.grid-group .image-box {\n    grid-area: image-box; }\n.grid-group .image-box img {\n      max-height: 100px;\n      max-height: 6.25rem; }\n.grid-group .descrip {\n    grid-area: descrip; }\n.grid-group .button-box {\n    grid-area: button-box; }\n.grid-group .quantity {\n    grid-area: quantity; }\n.grid-group .price {\n    grid-area: price; }\n.grid-group .product-tile {\n    display: grid;\n    grid-gap: 15px;\n    max-width: 50%;\n    grid-template-columns: 2fr 2fr 4fr 1fr;\n    grid-template-areas: 'image-box  descrip  descrip  button-box' 'image-box  quantity price    button-box'; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tZWwvaG9sbmcvZGV2L2xheW91dC9oZG1zL2FwcHMvZXhhbXBsZXMvc3JjL2FwcC9jc3MtZ3JpZC11c2VjYXNlcy9jc3MtZ3JpZC1wcm9kdWN0LXRpbGUvY3NzLWdyaWQtcHJvZHVjdC10aWxlLmNvbXBvbmVudC5zY3NzIiwiYXBwcy9leGFtcGxlcy9zcmMvYXBwL2Nzcy1ncmlkLXVzZWNhc2VzL2Nzcy1ncmlkLXByb2R1Y3QtdGlsZS9jc3MtZ3JpZC1wcm9kdWN0LXRpbGUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7OztFQ0dFO0FERUY7RUFDRSxhQUFhLEVBQUE7QUFEZjtJQUlJLG9CQUFvQixFQUFBO0FBSnhCO01BT00saUJBQWlCO01BQWpCLG1CQUFpQixFQUFBO0FBUHZCO0lBWUksa0JBQWtCLEVBQUE7QUFadEI7SUFnQkkscUJBQXFCLEVBQUE7QUFoQnpCO0lBb0JJLG1CQUFtQixFQUFBO0FBcEJ2QjtJQXdCSSxnQkFBZ0IsRUFBQTtBQXhCcEI7SUE0QkksYUFBYTtJQUNiLGNBQWM7SUFDZCxjQUFjO0lBQ2Qsc0NBQXNDO0lBQ3RDLHdHQUUyQyxFQUFBIiwiZmlsZSI6ImFwcHMvZXhhbXBsZXMvc3JjL2FwcC9jc3MtZ3JpZC11c2VjYXNlcy9jc3MtZ3JpZC1wcm9kdWN0LXRpbGUvY3NzLWdyaWQtcHJvZHVjdC10aWxlLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBDU1MgZ3JpZCBkZWZpbml0aW9uc1xuICpcbiAqL1xuXG4uZ3JpZC1ncm91cCB7XG4gIGRpc3BsYXk6IGdyaWQ7XG5cbiAgLmltYWdlLWJveCB7XG4gICAgZ3JpZC1hcmVhOiBpbWFnZS1ib3g7XG5cbiAgICBpbWcge1xuICAgICAgbWF4LWhlaWdodDogMTAwcHg7XG4gICAgfVxuICB9XG5cbiAgLmRlc2NyaXAge1xuICAgIGdyaWQtYXJlYTogZGVzY3JpcDtcbiAgfVxuXG4gIC5idXR0b24tYm94IHtcbiAgICBncmlkLWFyZWE6IGJ1dHRvbi1ib3g7XG4gIH1cblxuICAucXVhbnRpdHkge1xuICAgIGdyaWQtYXJlYTogcXVhbnRpdHk7XG4gIH1cblxuICAucHJpY2Uge1xuICAgIGdyaWQtYXJlYTogcHJpY2U7XG4gIH1cblxuICAucHJvZHVjdC10aWxlIHtcbiAgICBkaXNwbGF5OiBncmlkO1xuICAgIGdyaWQtZ2FwOiAxNXB4O1xuICAgIG1heC13aWR0aDogNTAlO1xuICAgIGdyaWQtdGVtcGxhdGUtY29sdW1uczogMmZyIDJmciA0ZnIgMWZyO1xuICAgIGdyaWQtdGVtcGxhdGUtYXJlYXM6XG4gICAgICAnaW1hZ2UtYm94ICBkZXNjcmlwICBkZXNjcmlwICBidXR0b24tYm94J1xuICAgICAgJ2ltYWdlLWJveCAgcXVhbnRpdHkgcHJpY2UgICAgYnV0dG9uLWJveCc7XG4gIH1cbn1cbiIsIi8qKlxuICogQ1NTIGdyaWQgZGVmaW5pdGlvbnNcbiAqXG4gKi9cbi5ncmlkLWdyb3VwIHtcbiAgZGlzcGxheTogZ3JpZDsgfVxuICAuZ3JpZC1ncm91cCAuaW1hZ2UtYm94IHtcbiAgICBncmlkLWFyZWE6IGltYWdlLWJveDsgfVxuICAgIC5ncmlkLWdyb3VwIC5pbWFnZS1ib3ggaW1nIHtcbiAgICAgIG1heC1oZWlnaHQ6IDEwMHB4OyB9XG4gIC5ncmlkLWdyb3VwIC5kZXNjcmlwIHtcbiAgICBncmlkLWFyZWE6IGRlc2NyaXA7IH1cbiAgLmdyaWQtZ3JvdXAgLmJ1dHRvbi1ib3gge1xuICAgIGdyaWQtYXJlYTogYnV0dG9uLWJveDsgfVxuICAuZ3JpZC1ncm91cCAucXVhbnRpdHkge1xuICAgIGdyaWQtYXJlYTogcXVhbnRpdHk7IH1cbiAgLmdyaWQtZ3JvdXAgLnByaWNlIHtcbiAgICBncmlkLWFyZWE6IHByaWNlOyB9XG4gIC5ncmlkLWdyb3VwIC5wcm9kdWN0LXRpbGUge1xuICAgIGRpc3BsYXk6IGdyaWQ7XG4gICAgZ3JpZC1nYXA6IDE1cHg7XG4gICAgbWF4LXdpZHRoOiA1MCU7XG4gICAgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOiAyZnIgMmZyIDRmciAxZnI7XG4gICAgZ3JpZC10ZW1wbGF0ZS1hcmVhczogJ2ltYWdlLWJveCAgZGVzY3JpcCAgZGVzY3JpcCAgYnV0dG9uLWJveCcgJ2ltYWdlLWJveCAgcXVhbnRpdHkgcHJpY2UgICAgYnV0dG9uLWJveCc7IH1cbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.ts":
+/*!********************************************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.ts ***!
+  \********************************************************************************************/
+/*! exports provided: CssGridProductTileComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CssGridProductTileComponent", function() { return CssGridProductTileComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var CssGridProductTileComponent = /** @class */ (function () {
+    function CssGridProductTileComponent() {
+    }
+    CssGridProductTileComponent.prototype.ngOnInit = function () { };
+    CssGridProductTileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-css-grid-product-tile',
+            template: __webpack_require__(/*! ./css-grid-product-tile.component.html */ "./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.html"),
+            styles: [__webpack_require__(/*! ./css-grid-product-tile.component.scss */ "./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], CssGridProductTileComponent);
+    return CssGridProductTileComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-usecases.component.html":
+/*!********************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-usecases.component.html ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!--Product Tile component-->\n<div class=\"col col-48\">\n  <div class=\"box-group\">\n    <div class=\"box\"><h1>CSS Grid product tile component</h1></div>\n  </div>\n</div>\n\n<hdms-css-grid-product-tile></hdms-css-grid-product-tile>\n"
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-usecases.component.scss":
+/*!********************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-usecases.component.scss ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHBzL2V4YW1wbGVzL3NyYy9hcHAvY3NzLWdyaWQtdXNlY2FzZXMvY3NzLWdyaWQtdXNlY2FzZXMuY29tcG9uZW50LnNjc3MifQ== */"
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-usecases.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-usecases.component.ts ***!
+  \******************************************************************/
+/*! exports provided: CssGridUsecasesComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CssGridUsecasesComponent", function() { return CssGridUsecasesComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var CssGridUsecasesComponent = /** @class */ (function () {
+    function CssGridUsecasesComponent() {
+    }
+    CssGridUsecasesComponent.prototype.ngOnInit = function () { };
+    CssGridUsecasesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-css-grid-usecases',
+            template: __webpack_require__(/*! ./css-grid-usecases.component.html */ "./src/app/css-grid-usecases/css-grid-usecases.component.html"),
+            styles: [__webpack_require__(/*! ./css-grid-usecases.component.scss */ "./src/app/css-grid-usecases/css-grid-usecases.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], CssGridUsecasesComponent);
+    return CssGridUsecasesComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/css-grid-usecases/css-grid-usecases.module.ts":
+/*!***************************************************************!*\
+  !*** ./src/app/css-grid-usecases/css-grid-usecases.module.ts ***!
+  \***************************************************************/
+/*! exports provided: CssGridUsecasesModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CssGridUsecasesModule", function() { return CssGridUsecasesModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "../../node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+/* harmony import */ var _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @hdms/shared/ui-core */ "../../libs/shared/ui-core/src/index.ts");
+/* harmony import */ var _css_grid_usecases_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./css-grid-usecases.component */ "./src/app/css-grid-usecases/css-grid-usecases.component.ts");
+/* harmony import */ var _css_grid_product_tile_css_grid_product_tile_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./css-grid-product-tile/css-grid-product-tile.component */ "./src/app/css-grid-usecases/css-grid-product-tile/css-grid-product-tile.component.ts");
+
+
+
+
+
+
+var CssGridUsecasesModule = /** @class */ (function () {
+    function CssGridUsecasesModule() {
+    }
+    CssGridUsecasesModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_css_grid_usecases_component__WEBPACK_IMPORTED_MODULE_4__["CssGridUsecasesComponent"], _css_grid_product_tile_css_grid_product_tile_component__WEBPACK_IMPORTED_MODULE_5__["CssGridProductTileComponent"]],
+            imports: [_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["SvgIconModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["FormModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["SearchFieldModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["TextModule"], _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["ButtonModule"]]
+        })
+    ], CssGridUsecasesModule);
+    return CssGridUsecasesModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/forms/forms-example.component.html":
+/*!****************************************************!*\
+  !*** ./src/app/forms/forms-example.component.html ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"col col-48\">\n  <div class=\"box-group\">\n    <div class=\"box\"><h1 class=\"heading-lg\">HDMS Forms Example</h1></div>\n  </div>\n</div>\n\n<div class=\"col col-48\">\n  <div class=\"box-group\">\n    <div class=\"box\"><h2 class=\"heading-sm text-uppercase text-red\">Template driven form</h2></div>\n  </div>\n</div>\n\n<form #templateDrivenForm=\"ngForm\" novalidate (ngSubmit)=\"onSubmit(templateDrivenForm.value)\">\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Input Field (label top)\">\n          <ui-core-input-field\n            [(ngModel)]=\"fData.labelTop\"\n            name=\"labelTop\"\n            placeholder=\"Input placeholder\"\n          ></ui-core-input-field>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Input Field\" labelColumnClasses=\"box-w-1-3\" inputColumnClasses=\"box-w-2-3\">\n          <ui-core-input-field\n            [(ngModel)]=\"fData.labelLeft\"\n            name=\"labelLeft\"\n            placeholder=\"Input placeholder\"\n            required\n            minlength=\"10\"\n            pattern=\"[a-zA-Z]*\"\n          ></ui-core-input-field>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element\n          label=\"Your address\"\n          labelColumnClasses=\"box-w-1-3\"\n          inputColumnClasses=\"box-w-2-3\"\n          ngModelGroup=\"address\"\n        >\n          <div class=\"d-flex\">\n            <div class=\"w-25 mr-2\">\n              <ui-core-input-field\n                [(ngModel)]=\"fData.postcode\"\n                name=\"postcode\"\n                placeholder=\"Postcode\"\n                required\n                minlength=\"5\"\n                pattern=\"\\d*\"\n              ></ui-core-input-field>\n            </div>\n            <div class=\"w-75\">\n              <ui-core-input-field\n                [(ngModel)]=\"fData.city\"\n                name=\"city\"\n                placeholder=\"City\"\n                required\n                minlength=\"4\"\n                pattern=\"[a-zA-Z]*\"\n              ></ui-core-input-field>\n            </div>\n          </div>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-md-24\">\n        <ui-core-form-element label=\"Radio Group\">\n          <ui-core-radiobutton\n            *ngFor=\"let label of ['one', 'two', 'three', 'infinity']\"\n            [(ngModel)]=\"fData.counter\"\n            name=\"counter\"\n            [value]=\"label\"\n            required\n          >\n            {{ label }}\n          </ui-core-radiobutton>\n        </ui-core-form-element>\n      </div>\n      <div class=\"col-md-24\">\n        <ui-core-form-element label=\"Checkbox Group\">\n          <ui-core-checkbox\n            *ngFor=\"let label of ['check 1', 'check 2']; index as i\"\n            [(ngModel)]=\"fData['check' + i]\"\n            [name]=\"'check-' + i\"\n            uiCoreRequiredTrue\n          >\n            {{ label }}\n          </ui-core-checkbox>\n          <ui-core-checkbox [(ngModel)]=\"fData.check3\" name=\"check-3\" disabled>\n            check 3\n          </ui-core-checkbox>\n        </ui-core-form-element>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Text Area\">\n          <ui-core-textarea\n            [(ngModel)]=\"fData.message\"\n            name=\"message\"\n            rows=\"5\"\n            expandOnFocus=\"true\"\n            maxlength=\"100\"\n            labelCharsLeft=\"You got {0} chars left.\"\n            placeholder=\"Textarea placeholder\"\n            required\n          ></ui-core-textarea>\n        </ui-core-form-element>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"col-sm-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <button class=\"btn btn-secondary mt-0\">Submit</button>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-sm-32\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <p>form data:</p>\n            <pre class=\"text\">{{ templateDrivenForm.value | json }} {{ templateDrivenForm.valid | json }}</pre>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</form>\n\n<div class=\"col col-48\">\n  <div class=\"box-group\">\n    <div class=\"box\"><h2 class=\"heading-sm text-uppercase text-red\">Reactive form</h2></div>\n  </div>\n</div>\n\n<form [formGroup]=\"reactiveForm\" novalidate (ngSubmit)=\"onSubmit(reactiveForm.value)\">\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Input Field (label top)\">\n          <ui-core-input-field\n            name=\"rf_labelTop\"\n            formControlName=\"labelTop\"\n            placeholder=\"Input placeholder\"\n          ></ui-core-input-field>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Input Field\" labelColumnClasses=\"box-w-1-3\" inputColumnClasses=\"box-w-2-3\">\n          <ui-core-input-field\n            name=\"rf_labelLeft\"\n            formControlName=\"labelLeft\"\n            placeholder=\"Input placeholder\"\n          ></ui-core-input-field>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element\n          label=\"Your address\"\n          labelColumnClasses=\"box-w-1-3\"\n          inputColumnClasses=\"box-w-2-3\"\n          formGroupName=\"address\"\n        >\n          <div class=\"d-flex\">\n            <div class=\"w-25 mr-2\">\n              <ui-core-input-field\n                name=\"rf_postcode\"\n                formControlName=\"postcode\"\n                placeholder=\"Postcode\"\n              ></ui-core-input-field>\n            </div>\n            <div class=\"w-75\">\n              <ui-core-input-field name=\"rf_city\" formControlName=\"city\" placeholder=\"City\"></ui-core-input-field>\n            </div>\n          </div>\n        </ui-core-form-element>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-md-24\">\n        <ui-core-form-element label=\"Radio Group\">\n          <ui-core-radiobutton\n            *ngFor=\"let label of ['one', 'two', 'three', 'infinity']\"\n            name=\"rf_counter\"\n            formControlName=\"counter\"\n            [value]=\"label\"\n          >\n            {{ label }}\n          </ui-core-radiobutton>\n        </ui-core-form-element>\n      </div>\n      <div class=\"col-md-24\">\n        <ui-core-form-element label=\"Checkbox Group\">\n          <ui-core-checkbox\n            *ngFor=\"let label of ['check 1', 'check 2', 'check 3']; index as i\"\n            [name]=\"'rf_check-' + i\"\n            [formControlName]=\"'check' + i\"\n          >\n            {{ label }}\n          </ui-core-checkbox>\n        </ui-core-form-element>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"col-48\">\n        <ui-core-form-element label=\"Text Area\">\n          <ui-core-textarea\n            name=\"rf_message\"\n            formControlName=\"message\"\n            rows=\"5\"\n            expandOnFocus=\"true\"\n            maxlength=\"100\"\n            labelCharsLeft=\"You got {0} chars left.\"\n            placeholder=\"Textarea placeholder\"\n          ></ui-core-textarea>\n        </ui-core-form-element>\n      </div>\n    </div>\n\n    <div class=\"row\">\n      <div class=\"col-sm-16\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <button class=\"btn btn-secondary mt-0\">Submit</button>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-sm-32\">\n        <div class=\"box-group\">\n          <div class=\"box\">\n            <p>form data:</p>\n            <pre class=\"text\">{{ reactiveForm.value | json }} {{ reactiveForm.valid | json }}</pre>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</form>\n"
+
+/***/ }),
+
+/***/ "./src/app/forms/forms-example.component.ts":
+/*!**************************************************!*\
+  !*** ./src/app/forms/forms-example.component.ts ***!
+  \**************************************************/
+/*! exports provided: FormsExampleComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormsExampleComponent", function() { return FormsExampleComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "../../node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @hdms/shared/ui-core */ "../../libs/shared/ui-core/src/index.ts");
+
+
+
+
+var FormsExampleComponent = /** @class */ (function () {
+    function FormsExampleComponent(fb) {
+        this.fData = {
+            labelTop: 'Prefilled text',
+            labelLeft: '',
+            postcode: '',
+            city: '',
+            message: '',
+            counter: 'two',
+            check0: false,
+            check1: true,
+            check2: false
+        };
+        this.reactiveForm = fb.group({
+            labelTop: [this.fData.labelTop],
+            labelLeft: [
+                this.fData.labelLeft,
+                [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(10), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern(/[a-zA-Z]*/)]
+            ],
+            address: fb.group({
+                postcode: [
+                    this.fData.postcode,
+                    [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(5), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].maxLength(6), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('[0-9]*')]
+                ],
+                city: [this.fData.city, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(4), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern(/[a-zA-Z]*/)]]
+            }),
+            counter: [this.fData.counter, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]],
+            check0: [this.fData.check0, [_hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["CustomValidators"].requiredTrue]],
+            check1: [this.fData.check1, [_hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["CustomValidators"].requiredTrue]],
+            check2: [{ value: this.fData.check2, disabled: true }],
+            message: [this.fData.message, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]]
+        });
+    }
+    FormsExampleComponent.prototype.onSubmit = function (value) {
+        console.log(value);
+    };
+    FormsExampleComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-forms-example',
+            template: __webpack_require__(/*! ./forms-example.component.html */ "./src/app/forms/forms-example.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"]])
+    ], FormsExampleComponent);
+    return FormsExampleComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/forms/forms-example.module.ts":
+/*!***********************************************!*\
+  !*** ./src/app/forms/forms-example.module.ts ***!
+  \***********************************************/
+/*! exports provided: FormsExampleModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormsExampleModule", function() { return FormsExampleModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _forms_example_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./forms-example.component */ "./src/app/forms/forms-example.component.ts");
+/* harmony import */ var _hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @hdms/shared/ui-core */ "../../libs/shared/ui-core/src/index.ts");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+
+
+
+
+
+var FormsExampleModule = /** @class */ (function () {
+    function FormsExampleModule() {
+    }
+    FormsExampleModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_forms_example_component__WEBPACK_IMPORTED_MODULE_2__["FormsExampleComponent"]],
+            imports: [_hdms_shared_ui_core__WEBPACK_IMPORTED_MODULE_3__["FormModule"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["CommonModule"]]
+        })
+    ], FormsExampleModule);
+    return FormsExampleModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.html":
+/*!*************************************************************************************************************!*\
+  !*** ./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.html ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h2>GraphQL Showcase Service Component</h2>\n<p>\n  This example demonstrates how share queries and their types between components using a service.\n</p>\n<div *ngIf=\"loading\">\n  Loading...\n</div>\n<table *ngIf=\"films\">\n  <thead>\n    <tr>\n      <th>Episode</th>\n      <th>Title</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let film of films\">\n      <td>{{ film.episodeId }}</td>\n      <td>{{ film.title }}</td>\n    </tr>\n  </tbody>\n</table>\n"
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.scss":
+/*!*************************************************************************************************************!*\
+  !*** ./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.scss ***!
+  \*************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host {\n  display: block;\n  padding: 10px;\n  padding: 0.625rem;\n  margin-top: 10px;\n  margin-top: 0.625rem;\n  margin-bottom: 10px;\n  margin-bottom: 0.625rem;\n  border: dashed 2px lightgrey;\n  border: dashed 0.125rem lightgrey; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tZWwvaG9sbmcvZGV2L2xheW91dC9oZG1zL2FwcHMvZXhhbXBsZXMvc3JjL2FwcC9ncmFwaHFsLWV4YW1wbGUvY29tcG9uZW50cy9ncmFwaHFsLXNob3djYXNlLXNlcnZpY2UvZ3JhcGhxbC1zaG93Y2FzZS1zZXJ2aWNlLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsY0FBYztFQUNkLGFBQWE7RUFBYixpQkFBYTtFQUNiLGdCQUFnQjtFQUFoQixvQkFBZ0I7RUFDaEIsbUJBQW1CO0VBQW5CLHVCQUFtQjtFQUNuQiw0QkFBNEI7RUFBNUIsaUNBQTRCLEVBQUEiLCJmaWxlIjoiYXBwcy9leGFtcGxlcy9zcmMvYXBwL2dyYXBocWwtZXhhbXBsZS9jb21wb25lbnRzL2dyYXBocWwtc2hvd2Nhc2Utc2VydmljZS9ncmFwaHFsLXNob3djYXNlLXNlcnZpY2UuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyI6aG9zdCB7XG4gIGRpc3BsYXk6IGJsb2NrO1xuICBwYWRkaW5nOiAxMHB4O1xuICBtYXJnaW4tdG9wOiAxMHB4O1xuICBtYXJnaW4tYm90dG9tOiAxMHB4O1xuICBib3JkZXI6IGRhc2hlZCAycHggbGlnaHRncmV5O1xufVxuIl19 */"
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.ts":
+/*!***********************************************************************************************************!*\
+  !*** ./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.ts ***!
+  \***********************************************************************************************************/
+/*! exports provided: GraphqlShowcaseServiceComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphqlShowcaseServiceComponent", function() { return GraphqlShowcaseServiceComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_all_films_graphql__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/all-films.graphql */ "./src/app/graphql-example/services/all-films.graphql.ts");
+
+
+
+var GraphqlShowcaseServiceComponent = /** @class */ (function () {
+    function GraphqlShowcaseServiceComponent(allfilms) {
+        this.allfilms = allfilms;
+        this.loading = true;
+    }
+    GraphqlShowcaseServiceComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        /*
+         * The syntax for accessing data via a GraphQL service differes from
+         * accessing data via the Apollo client directly. Instead of .watchQuery(...)
+         * the service exposes the methods .fetch(...) for fetching data once and
+         * .watch() for fetching data whenever it changes. Both methods accept
+         * variables as a first parameter that get passed to the query.
+         * See: https://www.apollographql.com/docs/angular/basics/services
+         */
+        this.allfilms
+            .watch({
+            first: 4
+        })
+            .valueChanges.subscribe(function (_a) {
+            var data = _a.data, loading = _a.loading;
+            _this.loading = loading;
+            _this.films = data.allFilms;
+        });
+    };
+    GraphqlShowcaseServiceComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-graphql-showcase-service',
+            template: __webpack_require__(/*! ./graphql-showcase-service.component.html */ "./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.html"),
+            styles: [__webpack_require__(/*! ./graphql-showcase-service.component.scss */ "./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_all_films_graphql__WEBPACK_IMPORTED_MODULE_2__["AllFilmsGQL"]])
+    ], GraphqlShowcaseServiceComponent);
+    return GraphqlShowcaseServiceComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.html":
+/*!*********************************************************************************************!*\
+  !*** ./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.html ***!
+  \*********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h2>GraphQL Showcase Component</h2>\n<p>This example demonstrates how to query specifiy data in a component.</p>\n<div *ngIf=\"loading\">\n  Loading...\n</div>\n<table *ngIf=\"films\">\n  <thead>\n    <tr>\n      <th>Episode</th>\n      <th>Title</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr *ngFor=\"let film of films\">\n      <td>{{ film.episodeId }}</td>\n      <td>{{ film.title }}</td>\n    </tr>\n  </tbody>\n</table>\n"
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.scss":
+/*!*********************************************************************************************!*\
+  !*** ./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.scss ***!
+  \*********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host {\n  display: block;\n  padding: 10px;\n  padding: 0.625rem;\n  margin-top: 10px;\n  margin-top: 0.625rem;\n  margin-bottom: 10px;\n  margin-bottom: 0.625rem;\n  border: dashed 2px lightgrey;\n  border: dashed 0.125rem lightgrey; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tZWwvaG9sbmcvZGV2L2xheW91dC9oZG1zL2FwcHMvZXhhbXBsZXMvc3JjL2FwcC9ncmFwaHFsLWV4YW1wbGUvY29tcG9uZW50cy9ncmFwaHFsLXNob3djYXNlL2dyYXBocWwtc2hvd2Nhc2UuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxjQUFjO0VBQ2QsYUFBYTtFQUFiLGlCQUFhO0VBQ2IsZ0JBQWdCO0VBQWhCLG9CQUFnQjtFQUNoQixtQkFBbUI7RUFBbkIsdUJBQW1CO0VBQ25CLDRCQUE0QjtFQUE1QixpQ0FBNEIsRUFBQSIsImZpbGUiOiJhcHBzL2V4YW1wbGVzL3NyYy9hcHAvZ3JhcGhxbC1leGFtcGxlL2NvbXBvbmVudHMvZ3JhcGhxbC1zaG93Y2FzZS9ncmFwaHFsLXNob3djYXNlLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiOmhvc3Qge1xuICBkaXNwbGF5OiBibG9jaztcbiAgcGFkZGluZzogMTBweDtcbiAgbWFyZ2luLXRvcDogMTBweDtcbiAgbWFyZ2luLWJvdHRvbTogMTBweDtcbiAgYm9yZGVyOiBkYXNoZWQgMnB4IGxpZ2h0Z3JleTtcbn1cbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.ts":
+/*!*******************************************************************************************!*\
+  !*** ./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.ts ***!
+  \*******************************************************************************************/
+/*! exports provided: GraphqlShowcaseComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphqlShowcaseComponent", function() { return GraphqlShowcaseComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var apollo_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-angular */ "../../node_modules/apollo-angular/fesm5/ng.apollo.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! graphql-tag */ "../../node_modules/graphql-tag/src/index.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+/* Query */
+var FILMS_LIST_QUERY = graphql_tag__WEBPACK_IMPORTED_MODULE_3___default()(templateObject_1 || (templateObject_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"](["\n  query AllFilmsGQL {\n    allFilms(first: 4, orderBy: episodeId_ASC) {\n      episodeId\n      title\n    }\n  }\n"], ["\n  query AllFilmsGQL {\n    allFilms(first: 4, orderBy: episodeId_ASC) {\n      episodeId\n      title\n    }\n  }\n"])));
+/* Component */
+var GraphqlShowcaseComponent = /** @class */ (function () {
+    function GraphqlShowcaseComponent(apollo) {
+        this.apollo = apollo;
+        this.loading = true;
+    }
+    GraphqlShowcaseComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.apollo
+            .watchQuery({
+            query: FILMS_LIST_QUERY
+        })
+            .valueChanges.subscribe(function (_a) {
+            var data = _a.data, loading = _a.loading;
+            _this.loading = loading;
+            _this.films = data.allFilms;
+        });
+    };
+    GraphqlShowcaseComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-graphql-showcase',
+            template: __webpack_require__(/*! ./graphql-showcase.component.html */ "./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.html"),
+            styles: [__webpack_require__(/*! ./graphql-showcase.component.scss */ "./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [apollo_angular__WEBPACK_IMPORTED_MODULE_2__["Apollo"]])
+    ], GraphqlShowcaseComponent);
+    return GraphqlShowcaseComponent;
+}());
+
+var templateObject_1;
+
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/graphql-example.module.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/graphql-example/graphql-example.module.ts ***!
+  \***********************************************************/
+/*! exports provided: GraphqlExampleModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphqlExampleModule", function() { return GraphqlExampleModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _graphql_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./graphql.module */ "./src/app/graphql-example/graphql.module.ts");
+/* harmony import */ var _components_graphql_showcase_graphql_showcase_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/graphql-showcase/graphql-showcase.component */ "./src/app/graphql-example/components/graphql-showcase/graphql-showcase.component.ts");
+/* harmony import */ var _components_graphql_showcase_service_graphql_showcase_service_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/graphql-showcase-service/graphql-showcase-service.component */ "./src/app/graphql-example/components/graphql-showcase-service/graphql-showcase-service.component.ts");
+/* harmony import */ var _pages_graphql_example_graphql_example_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/graphql-example/graphql-example.component */ "./src/app/graphql-example/pages/graphql-example/graphql-example.component.ts");
+
+
+
+
+
+
+
+var GraphqlExampleModule = /** @class */ (function () {
+    function GraphqlExampleModule() {
+    }
+    GraphqlExampleModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_components_graphql_showcase_graphql_showcase_component__WEBPACK_IMPORTED_MODULE_4__["GraphqlShowcaseComponent"], _components_graphql_showcase_service_graphql_showcase_service_component__WEBPACK_IMPORTED_MODULE_5__["GraphqlShowcaseServiceComponent"], _pages_graphql_example_graphql_example_component__WEBPACK_IMPORTED_MODULE_6__["GraphqlExampleComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _graphql_module__WEBPACK_IMPORTED_MODULE_3__["GraphQLModule"]]
+        })
+    ], GraphqlExampleModule);
+    return GraphqlExampleModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/graphql.module.ts":
+/*!***************************************************!*\
+  !*** ./src/app/graphql-example/graphql.module.ts ***!
+  \***************************************************/
+/*! exports provided: GraphQLModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphQLModule", function() { return GraphQLModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var apollo_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-angular */ "../../node_modules/apollo-angular/fesm5/ng.apollo.js");
+/* harmony import */ var apollo_angular_link_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! apollo-angular-link-http */ "../../node_modules/apollo-angular-link-http/fesm5/ng.apolloLink.http.js");
+/* harmony import */ var apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! apollo-cache-inmemory */ "../../node_modules/apollo-cache-inmemory/lib/bundle.esm.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "../../node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var apollo_link__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! apollo-link */ "../../node_modules/apollo-link/lib/bundle.esm.js");
+
+
+
+
+
+
+
+
+/*
+ * A middleware can be used to inspect and modify a GraphQL requests before
+ * they are send to the server. For further information see
+ * https://www.apollographql.com/docs/angular/basics/network-layer.
+ * Note: To modify the outgoing http request (e.g. set headers) use
+ * apollo-link-context: https://www.apollographql.com/docs/link/links/context.
+ * Alternatily the angular HTTPInterceptor can be used for that case
+ * as apollo-angular-link-http used the angular HTTPClientModule internally.
+ */
+var middleware = new apollo_link__WEBPACK_IMPORTED_MODULE_7__["ApolloLink"](function (operation, forward) {
+    console.log('APOLLO MIDDLEWARE INTERCEPTION', operation);
+    return forward(operation);
+});
+/*
+ * Creates the actual Apollo clients for each defined endpoint.
+ * Uses http-link to make GraphQL requests via HTTP and injects
+ * a middleware to log the outgoing request.
+ */
+var createApollo = function (httpLink) {
+    return {
+        /* Define the caching method */
+        cache: new apollo_cache_inmemory__WEBPACK_IMPORTED_MODULE_4__["InMemoryCache"](),
+        /*
+         * Use the httpLink to connect to the GraphQL server via HTTP.
+         * This is the place were middlewares and afterwares can be defined.
+         */
+        link: Object(apollo_link__WEBPACK_IMPORTED_MODULE_7__["concat"])(
+        /*
+         * Add the middleware and http link to the apollo client.
+         * Note: The middleware needs to be added before the httpLink
+         * as the httpLink is a terminating link.
+         */
+        middleware, httpLink.create({
+            uri: _environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"]['graphqlEndpoint']
+        }))
+    };
+};
+var GraphQLModule = /** @class */ (function () {
+    function GraphQLModule() {
+    }
+    GraphQLModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            imports: [_angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"]],
+            exports: [apollo_angular__WEBPACK_IMPORTED_MODULE_2__["ApolloModule"], apollo_angular_link_http__WEBPACK_IMPORTED_MODULE_3__["HttpLinkModule"]],
+            providers: [
+                {
+                    /*
+                     * APOLLO_OPTIONS is an AngularInjection token that is
+                     * used to pass dependency injection tokens to
+                     * the Apollo Client. The token will be generated
+                     * before any service / component will be intantiated. Therefore,
+                     * services and components will use the already configured
+                     * Apollo client.
+                     */
+                    provide: apollo_angular__WEBPACK_IMPORTED_MODULE_2__["APOLLO_OPTIONS"],
+                    useFactory: createApollo,
+                    deps: [apollo_angular_link_http__WEBPACK_IMPORTED_MODULE_3__["HttpLink"]]
+                }
+            ]
+        })
+    ], GraphQLModule);
+    return GraphQLModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/pages/graphql-example/graphql-example.component.html":
+/*!**************************************************************************************!*\
+  !*** ./src/app/graphql-example/pages/graphql-example/graphql-example.component.html ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1>GraphQL Components</h1>\n\n<p>\n  For further information go to the confluence\n  <a href=\"https://confluence.hilti.com/pages/viewpage.action?pageId=56439882\">\n    documentation\n  </a>\n  .\n</p>\n\n<hdms-graphql-showcase></hdms-graphql-showcase>\n<hdms-graphql-showcase-service></hdms-graphql-showcase-service>\n"
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/pages/graphql-example/graphql-example.component.ts":
+/*!************************************************************************************!*\
+  !*** ./src/app/graphql-example/pages/graphql-example/graphql-example.component.ts ***!
+  \************************************************************************************/
+/*! exports provided: GraphqlExampleComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GraphqlExampleComponent", function() { return GraphqlExampleComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var GraphqlExampleComponent = /** @class */ (function () {
+    function GraphqlExampleComponent() {
+    }
+    GraphqlExampleComponent.prototype.ngOnInit = function () { };
+    GraphqlExampleComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-graphql-example',
+            template: __webpack_require__(/*! ./graphql-example.component.html */ "./src/app/graphql-example/pages/graphql-example/graphql-example.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], GraphqlExampleComponent);
+    return GraphqlExampleComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/graphql-example/services/all-films.graphql.ts":
+/*!***************************************************************!*\
+  !*** ./src/app/graphql-example/services/all-films.graphql.ts ***!
+  \***************************************************************/
+/*! exports provided: AllFilmsGQL */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AllFilmsGQL", function() { return AllFilmsGQL; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var apollo_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! apollo-angular */ "../../node_modules/apollo-angular/fesm5/ng.apollo.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! graphql-tag */ "../../node_modules/graphql-tag/src/index.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+/*
+ * Extend the apollo angular Query service,
+ * See: https://www.apollographql.com/docs/angular/basics/services
+ */
+var AllFilmsGQL = /** @class */ (function (_super) {
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"](AllFilmsGQL, _super);
+    function AllFilmsGQL() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.document = graphql_tag__WEBPACK_IMPORTED_MODULE_3___default()(templateObject_1 || (templateObject_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"](["\n    query getAllFilms($first: Int!) {\n      allFilms(first: $first) {\n        episodeId\n        title\n      }\n    }\n  "], ["\n    query getAllFilms($first: Int!) {\n      allFilms(first: $first) {\n        episodeId\n        title\n      }\n    }\n  "])));
+        return _this;
+    }
+    AllFilmsGQL = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        })
+    ], AllFilmsGQL);
+    return AllFilmsGQL;
+}(apollo_angular__WEBPACK_IMPORTED_MODULE_2__["Query"]));
+
+var templateObject_1;
+
+
+/***/ }),
+
+/***/ "./src/app/home/home.module.ts":
+/*!*************************************!*\
+  !*** ./src/app/home/home.module.ts ***!
+  \*************************************/
+/*! exports provided: HomeModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomeModule", function() { return HomeModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _pages_home_home_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/home/home.component */ "./src/app/home/pages/home/home.component.ts");
+
+
+
+
+var HomeModule = /** @class */ (function () {
+    function HomeModule() {
+    }
+    HomeModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_pages_home_home_component__WEBPACK_IMPORTED_MODULE_3__["HomeComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"]]
+        })
+    ], HomeModule);
+    return HomeModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/home/pages/home/home.component.html":
+/*!*****************************************************!*\
+  !*** ./src/app/home/pages/home/home.component.html ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1>HDMS Example App</h1>\n<p>\n  This app serves as a example project to showcase the use of different concepts within the HDMS project\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/home/pages/home/home.component.ts":
+/*!***************************************************!*\
+  !*** ./src/app/home/pages/home/home.component.ts ***!
+  \***************************************************/
+/*! exports provided: HomeComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomeComponent", function() { return HomeComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var HomeComponent = /** @class */ (function () {
+    function HomeComponent() {
+    }
+    HomeComponent.prototype.ngOnInit = function () { };
+    HomeComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-home',
+            template: __webpack_require__(/*! ./home.component.html */ "./src/app/home/pages/home/home.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], HomeComponent);
+    return HomeComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/mock-example/mock-example.component.html":
+/*!**********************************************************!*\
+  !*** ./src/app/mock-example/mock-example.component.html ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"text-align:center\">\n  <h3>\n    Angular presentation of mock data in dummy component\n  </h3>\n</div>\n<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-md-48\">\n      <div class=\"box-group\">\n        <div class=\"box\">\n          <a *ngFor=\"let item of priceResponseData\">\n            <div class=\"pull-left\">\n              <p class=\"list-group-item-text\">Item has material number {{ item.materialNumber }}</p>\n            </div>\n            <span class=\"pull-right\">\n              <p>\n                Fleet price is {{ item.fleet.formattedMonthlyValue }} {{ item.fleet.currencyISO }} charged\n                {{ item.fleet.priceType }}\n              </p>\n              <p>\n                Standard price is {{ item.standard.formattedValue }} {{ item.standard.currencyISO }} charged UPFRONT\n              </p>\n              <hr />\n            </span>\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/mock-example/mock-example.component.scss":
+/*!**********************************************************!*\
+  !*** ./src/app/mock-example/mock-example.component.scss ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".mock-example {\n  color: inherit; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tZWwvaG9sbmcvZGV2L2xheW91dC9oZG1zL2FwcHMvZXhhbXBsZXMvc3JjL2FwcC9tb2NrLWV4YW1wbGUvbW9jay1leGFtcGxlLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsY0FBYyxFQUFBIiwiZmlsZSI6ImFwcHMvZXhhbXBsZXMvc3JjL2FwcC9tb2NrLWV4YW1wbGUvbW9jay1leGFtcGxlLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLm1vY2stZXhhbXBsZSB7XG4gIGNvbG9yOiBpbmhlcml0O1xufVxuIl19 */"
+
+/***/ }),
+
+/***/ "./src/app/mock-example/mock-example.component.ts":
+/*!********************************************************!*\
+  !*** ./src/app/mock-example/mock-example.component.ts ***!
+  \********************************************************/
+/*! exports provided: MockExampleComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MockExampleComponent", function() { return MockExampleComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _mock_example_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mock-example.service */ "./src/app/mock-example/mock-example.service.ts");
+
+
+
+var MockExampleComponent = /** @class */ (function () {
+    function MockExampleComponent(pricingService) {
+        this.priceResponseData = [];
+        this.errorMessageData = [];
+        this.priceResponseData = pricingService.getPrices();
+        this.errorMessageData = pricingService.getErrors();
+    }
+    MockExampleComponent.prototype.ngOnInit = function () { };
+    MockExampleComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-mock-example',
+            template: __webpack_require__(/*! ./mock-example.component.html */ "./src/app/mock-example/mock-example.component.html"),
+            styles: [__webpack_require__(/*! ./mock-example.component.scss */ "./src/app/mock-example/mock-example.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_mock_example_service__WEBPACK_IMPORTED_MODULE_2__["MockExampleService"]])
+    ], MockExampleComponent);
+    return MockExampleComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/mock-example/mock-example.mock.ts":
+/*!***************************************************!*\
+  !*** ./src/app/mock-example/mock-example.mock.ts ***!
+  \***************************************************/
+/*! exports provided: errorMessages, infoMessages, priceResponse */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorMessages", function() { return errorMessages; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "infoMessages", function() { return infoMessages; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "priceResponse", function() { return priceResponse; });
+var errorMessages = [];
+var infoMessages = [];
+var priceResponse = [
+    {
+        materialNumber: '2186920',
+        fleet: {
+            currencyIso: 'USD',
+            priceType: 'MONTHLY',
+            quantity: '1',
+            priceUnit: 'Each',
+            formattedUpfrontValue: '$0.00',
+            formattedMonthlyValue: '$7.00',
+            total: {
+                quantity: '1',
+                formattedUpfrontValue: '$0.00',
+                formattedMonthlyValue: '$7.00'
+            }
+        },
+        standard: {
+            currencyIso: 'USD',
+            formattedValue: '$159.00',
+            priceType: 'NORMAL',
+            quantity: '1',
+            priceUnit: 'Each',
+            total: { value: 159.0, formattedValue: '$159.00', quantity: '1' }
+        }
+    },
+    {
+        materialNumber: '2173219',
+        fleet: {
+            currencyIso: 'USD',
+            priceType: 'MONTHLY',
+            quantity: '1',
+            priceUnit: 'Each',
+            formattedUpfrontValue: '$0.00',
+            formattedMonthlyValue: '$30.00',
+            total: {
+                quantity: '1',
+                formattedUpfrontValue: '$0.00',
+                formattedMonthlyValue: '$30.00'
+            }
+        },
+        standard: {
+            currencyIso: 'USD',
+            formattedValue: '$899.00',
+            priceType: 'NORMAL',
+            quantity: '1',
+            priceUnit: 'Each',
+            total: { value: 899.0, formattedValue: '$899.00', quantity: '1' }
+        }
+    },
+    {
+        materialNumber: '2181024',
+        fleet: {
+            currencyIso: 'USD',
+            priceType: 'MONTHLY',
+            quantity: '1',
+            priceUnit: 'Each',
+            formattedUpfrontValue: '$0.00',
+            formattedMonthlyValue: '$69.15',
+            total: {
+                quantity: '1',
+                formattedUpfrontValue: '$0.00',
+                formattedMonthlyValue: '$69.15'
+            }
+        },
+        standard: {
+            currencyIso: 'USD',
+            formattedValue: '$2,349.00',
+            priceType: 'NORMAL',
+            quantity: '1',
+            priceUnit: 'Each',
+            total: { value: 2349.0, formattedValue: '$2,349.00', quantity: '1' }
+        }
+    },
+    {
+        materialNumber: '2149902',
+        fleet: {
+            currencyIso: 'USD',
+            priceType: 'MONTHLY',
+            quantity: '1',
+            priceUnit: 'Each',
+            formattedUpfrontValue: '$0.00',
+            formattedMonthlyValue: '$10.00',
+            total: {
+                quantity: '1',
+                formattedUpfrontValue: '$0.00',
+                formattedMonthlyValue: '$10.00'
+            }
+        },
+        standard: {
+            currencyIso: 'USD',
+            formattedValue: '$249.00',
+            priceType: 'NORMAL',
+            quantity: '1',
+            priceUnit: 'Each',
+            total: { value: 249.0, formattedValue: '$249.00', quantity: '1' }
+        }
+    },
+    {
+        materialNumber: '2152385',
+        fleet: {
+            currencyIso: 'USD',
+            priceType: 'MONTHLY',
+            quantity: '1',
+            priceUnit: 'Each',
+            formattedUpfrontValue: '$0.00',
+            formattedMonthlyValue: '$29.60',
+            total: {
+                quantity: '1',
+                formattedUpfrontValue: '$0.00',
+                formattedMonthlyValue: '$29.60'
+            }
+        },
+        standard: {
+            currencyIso: 'USD',
+            formattedValue: '$769.00',
+            priceType: 'NORMAL',
+            quantity: '1',
+            priceUnit: 'Each',
+            total: { value: 769.0, formattedValue: '$769.00', quantity: '1' }
+        }
+    },
+    {
+        materialNumber: '2191223',
+        fleet: {
+            currencyIso: 'USD',
+            priceType: 'MONTHLY',
+            quantity: '1',
+            priceUnit: 'Each',
+            formattedUpfrontValue: '$0.00',
+            formattedMonthlyValue: '$36.00',
+            total: {
+                quantity: '1',
+                formattedUpfrontValue: '$0.00',
+                formattedMonthlyValue: '$36.00'
+            }
+        },
+        standard: {
+            currencyIso: 'USD',
+            formattedValue: '$1,149.00',
+            priceType: 'NORMAL',
+            quantity: '1',
+            priceUnit: 'Each',
+            total: { value: 1149.0, formattedValue: '$1,149.00', quantity: '1' }
+        }
+    }
+];
+
+
+/***/ }),
+
+/***/ "./src/app/mock-example/mock-example.module.ts":
+/*!*****************************************************!*\
+  !*** ./src/app/mock-example/mock-example.module.ts ***!
+  \*****************************************************/
+/*! exports provided: MockExampleModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MockExampleModule", function() { return MockExampleModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _mock_example_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mock-example.component */ "./src/app/mock-example/mock-example.component.ts");
+
+
+
+
+var MockExampleModule = /** @class */ (function () {
+    function MockExampleModule() {
+    }
+    MockExampleModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_mock_example_component__WEBPACK_IMPORTED_MODULE_3__["MockExampleComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"]]
+        })
+    ], MockExampleModule);
+    return MockExampleModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/mock-example/mock-example.service.ts":
+/*!******************************************************!*\
+  !*** ./src/app/mock-example/mock-example.service.ts ***!
+  \******************************************************/
+/*! exports provided: MockExampleService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MockExampleService", function() { return MockExampleService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _mock_example_mock__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mock-example.mock */ "./src/app/mock-example/mock-example.mock.ts");
+
+
+
+var MockExampleService = /** @class */ (function () {
+    function MockExampleService() {
+    }
+    MockExampleService.prototype.getPrices = function () {
+        return _mock_example_mock__WEBPACK_IMPORTED_MODULE_2__["priceResponse"];
+    };
+    MockExampleService.prototype.getErrors = function () {
+        return _mock_example_mock__WEBPACK_IMPORTED_MODULE_2__["errorMessages"];
+    };
+    MockExampleService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        })
+    ], MockExampleService);
+    return MockExampleService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/pipes-showcase/pipes-showcase.component.html":
+/*!**************************************************************!*\
+  !*** ./src/app/pipes-showcase/pipes-showcase.component.html ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1>Pipe Showcase</h1>\n<p>This component showcases different pipes within the hdms workspace.</p>\n<table dir=\"ltr\" width=\"500\" border=\"1\">\n  <thead>\n    <tr>\n      <th>Pipe</th>\n      <th>Example</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Currency Format</td>\n      <td>\n        <div>Global pattern: {{ 12223.457 | currencyFormat }}</div>\n        <div>Argument pattern: {{ 12223.457 | currencyFormat: 'USD ## ###.##' }}</div>\n      </td>\n    </tr>\n  </tbody>\n</table>\n"
+
+/***/ }),
+
+/***/ "./src/app/pipes-showcase/pipes-showcase.component.ts":
+/*!************************************************************!*\
+  !*** ./src/app/pipes-showcase/pipes-showcase.component.ts ***!
+  \************************************************************/
+/*! exports provided: PipesShowcaseComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PipesShowcaseComponent", function() { return PipesShowcaseComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+var PipesShowcaseComponent = /** @class */ (function () {
+    function PipesShowcaseComponent() {
+    }
+    PipesShowcaseComponent.prototype.ngOnInit = function () { };
+    PipesShowcaseComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-pipes-showcase',
+            template: __webpack_require__(/*! ./pipes-showcase.component.html */ "./src/app/pipes-showcase/pipes-showcase.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], PipesShowcaseComponent);
+    return PipesShowcaseComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/pipes-showcase/pipes-showcase.module.ts":
+/*!*********************************************************!*\
+  !*** ./src/app/pipes-showcase/pipes-showcase.module.ts ***!
+  \*********************************************************/
+/*! exports provided: PipeShowcaseModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PipeShowcaseModule", function() { return PipeShowcaseModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _pipes_showcase_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pipes-showcase.component */ "./src/app/pipes-showcase/pipes-showcase.component.ts");
+/* harmony import */ var _hdms_shared_util_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @hdms/shared/util-core */ "../../libs/shared/util-core/src/index.ts");
+
+
+
+
+
+var PipeShowcaseModule = /** @class */ (function () {
+    function PipeShowcaseModule() {
+    }
+    PipeShowcaseModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_pipes_showcase_component__WEBPACK_IMPORTED_MODULE_3__["PipesShowcaseComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _hdms_shared_util_core__WEBPACK_IMPORTED_MODULE_4__["CurrencyFormatModule"]]
+        })
+    ], PipeShowcaseModule);
+    return PipeShowcaseModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/translation/i18next-translation.module.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/translation/i18next-translation.module.ts ***!
+  \***********************************************************/
+/*! exports provided: localeIdFactory, appInit, I18N_PROVIDERS, I18NextTranslationModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "localeIdFactory", function() { return localeIdFactory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "appInit", function() { return appInit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I18N_PROVIDERS", function() { return I18N_PROVIDERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I18NextTranslationModule", function() { return I18NextTranslationModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _hdms_shared_util_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @hdms/shared/util-core */ "../../libs/shared/util-core/src/index.ts");
+/* harmony import */ var i18next_xhr_backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! i18next-xhr-backend */ "../../node_modules/i18next-xhr-backend/dist/esm/i18nextXHRBackend.js");
+/* harmony import */ var angular_i18next__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! angular-i18next */ "../../node_modules/angular-i18next/fesm5/angular-i18next.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+
+
+
+function localeIdFactory(i18next) {
+    return i18next.language;
+}
+function appInit(i18next, windowRef) {
+    return function () {
+        /**
+         * In this example application the current application
+         * language is passed as a parameter via the window object.
+         * Hovever when using i18next in a production application
+         * more sophisticated language detection methods can be used
+         * as e.g. deriving language from browser language.
+         */
+        var appWindow = windowRef.nativeWindow;
+        var appLang = appWindow['__app_lang'] || 'en';
+        /**
+         * Initialize i18next.
+         * More options can be found at https://www.i18next.com/overview/configuration-options
+         * such as defining a fallback language.
+         */
+        return i18next.use(i18next_xhr_backend__WEBPACK_IMPORTED_MODULE_2__).init({
+            /**
+             * Whitelist only current used language. For production
+             * a more sophisticated whitelist might be used, as e.g.
+             * whitelist all languages that have corresponding language files
+             * in the assets folder.
+             */
+            whitelist: [appLang],
+            lng: appLang,
+            returnEmptyString: false,
+            appendNamespaceToMissingKey: true,
+            backend: {
+                /**
+                 * Here we define a mapping between our namespace and
+                 * our file structure and naming convention.
+                 */
+                loadPath: 'assets/i18n/{{ns}}.{{lng}}.json'
+            },
+            /**
+             * Here we define the namespaces that we want to use.
+             * In this example we only have one namespace, that
+             * of our application.
+             */
+            ns: ['examples']
+        });
+    };
+}
+var I18N_PROVIDERS = [
+    /**
+     * Initialize app only after translations have loaded.
+     * See: https://github.com/Romanchuk/angular-i18next#initialize-i18next-before-angular-application
+     */
+    {
+        provide: _angular_core__WEBPACK_IMPORTED_MODULE_4__["APP_INITIALIZER"],
+        useFactory: appInit,
+        deps: [angular_i18next__WEBPACK_IMPORTED_MODULE_3__["I18NEXT_SERVICE"], _hdms_shared_util_core__WEBPACK_IMPORTED_MODULE_1__["WindowRefService"]],
+        multi: true
+    },
+    {
+        provide: _angular_core__WEBPACK_IMPORTED_MODULE_4__["LOCALE_ID"],
+        deps: [angular_i18next__WEBPACK_IMPORTED_MODULE_3__["I18NEXT_SERVICE"]],
+        useFactory: localeIdFactory
+    }
+];
+var I18NextTranslationModule = /** @class */ (function () {
+    function I18NextTranslationModule() {
+    }
+    I18NextTranslationModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_4__["NgModule"])({
+            declarations: [],
+            imports: [angular_i18next__WEBPACK_IMPORTED_MODULE_3__["I18NextModule"].forRoot()],
+            providers: [I18N_PROVIDERS],
+            exports: [angular_i18next__WEBPACK_IMPORTED_MODULE_3__["I18NextModule"]]
+        })
+    ], I18NextTranslationModule);
+    return I18NextTranslationModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/translation/translation.component.html":
+/*!********************************************************!*\
+  !*** ./src/app/translation/translation.component.html ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1>This page demonstrates the usage of i18next within HDMS applications</h1>\n\n<p>Current language: {{ getLanguage() }}</p>\n\n<h2>Translation Examples</h2>\n\n<h3 class=\"example-headline\">Usage in Pipes</h3>\n<p>{{ 'examples:examples.dummy' | i18next }}</p>\n\n<h3 class=\"example-headline\">Usage with parameters and pipes</h3>\n<p>{{ 'examples:examples.parameters' | i18next: { name: 'Joe', time: '04:06' } }}</p>\n\n<h3 class=\"example-headline\">Usage with richtext</h3>\n<p [innerHTML]=\"'examples:examples.richtext' | i18next: { name: 'Joe', time: '04:06' }\"></p>\n\n<h3 class=\"example-headline\">Usage with plural</h3>\n<p>{{ 'examples:examples.plural' | i18next: { count: count } }}</p>\n<button (click)=\"decreaseCount()\" [disabled]=\"count === 0\">-</button>\n<button (click)=\"increaseCount()\" [disabled]=\"count === 2\">+</button>\n\n<h3 class=\"example-headline\">Usage with gender</h3>\n<p>{{ 'examples:examples.gender' | i18next: { context: gender } }}</p>\n<button (click)=\"setGender('male')\" [disabled]=\"gender === 'male'\">Set male</button>\n<button (click)=\"setGender('female')\" [disabled]=\"gender === 'female'\">Set female</button>\n<button (click)=\"setGender('')\" [disabled]=\"gender === ''\">Set none</button>\n\n<h3 class=\"example-headline\">Usage within typescript</h3>\n<p>{{ languageString }}</p>\n\n<h3 class=\"example-headline\">Documentation</h3>\nSee official\n<a href=\"https://www.i18next.com/\">i18next documentation</a>\nfor more details.\n"
+
+/***/ }),
+
+/***/ "./src/app/translation/translation.component.scss":
+/*!********************************************************!*\
+  !*** ./src/app/translation/translation.component.scss ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ":host .example-headline {\n  font-size: 18px;\n  font-size: 1.125rem;\n  color: green; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tZWwvaG9sbmcvZGV2L2xheW91dC9oZG1zL2FwcHMvZXhhbXBsZXMvc3JjL2FwcC90cmFuc2xhdGlvbi90cmFuc2xhdGlvbi5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUVJLGVBQWU7RUFBZixtQkFBZTtFQUNmLFlBQVksRUFBQSIsImZpbGUiOiJhcHBzL2V4YW1wbGVzL3NyYy9hcHAvdHJhbnNsYXRpb24vdHJhbnNsYXRpb24uY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyI6aG9zdCB7XG4gIC5leGFtcGxlLWhlYWRsaW5lIHtcbiAgICBmb250LXNpemU6IDE4cHg7XG4gICAgY29sb3I6IGdyZWVuO1xuICB9XG59XG4iXX0= */"
+
+/***/ }),
+
+/***/ "./src/app/translation/translation.component.ts":
+/*!******************************************************!*\
+  !*** ./src/app/translation/translation.component.ts ***!
+  \******************************************************/
+/*! exports provided: TranslationComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TranslationComponent", function() { return TranslationComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var angular_i18next__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! angular-i18next */ "../../node_modules/angular-i18next/fesm5/angular-i18next.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+
+
+
+var TranslationComponent = /** @class */ (function () {
+    function TranslationComponent(i18NextService, i18NextPipe) {
+        this.i18NextService = i18NextService;
+        this.i18NextPipe = i18NextPipe;
+        this.count = 0;
+        this.gender = 'male';
+    }
+    TranslationComponent.prototype.ngOnInit = function () {
+        this.languageString = this.i18NextPipe.transform('examples:examples.dummy');
+    };
+    TranslationComponent.prototype.getLanguage = function () {
+        return this.i18NextService.language;
+    };
+    TranslationComponent.prototype.increaseCount = function () {
+        this.count += 1;
+    };
+    TranslationComponent.prototype.decreaseCount = function () {
+        this.count -= 1;
+    };
+    TranslationComponent.prototype.setGender = function (gender) {
+        this.gender = gender;
+    };
+    TranslationComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
+            selector: 'hdms-translation',
+            template: __webpack_require__(/*! ./translation.component.html */ "./src/app/translation/translation.component.html"),
+            styles: [__webpack_require__(/*! ./translation.component.scss */ "./src/app/translation/translation.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Inject"])(angular_i18next__WEBPACK_IMPORTED_MODULE_1__["I18NEXT_SERVICE"])),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [Object, angular_i18next__WEBPACK_IMPORTED_MODULE_1__["I18NextPipe"]])
+    ], TranslationComponent);
+    return TranslationComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/translation/translation.module.ts":
+/*!***************************************************!*\
+  !*** ./src/app/translation/translation.module.ts ***!
+  \***************************************************/
+/*! exports provided: TranslationModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TranslationModule", function() { return TranslationModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _i18next_translation_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./i18next-translation.module */ "./src/app/translation/i18next-translation.module.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _translation_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./translation.component */ "./src/app/translation/translation.component.ts");
+
+
+
+
+
+var TranslationModule = /** @class */ (function () {
+    function TranslationModule() {
+    }
+    TranslationModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
+            declarations: [_translation_component__WEBPACK_IMPORTED_MODULE_4__["TranslationComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_3__["CommonModule"], _i18next_translation_module__WEBPACK_IMPORTED_MODULE_1__["I18NextTranslationModule"]],
+            providers: []
+        })
+    ], TranslationModule);
+    return TranslationModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/window-ref/window-ref.component.html":
+/*!******************************************************!*\
+  !*** ./src/app/window-ref/window-ref.component.html ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1>Window Object Reference</h1>\n<p>\n  This component showcases how to use the windowRefService from the shared/util-core lib.\n</p>\n{{ _window }}\n"
+
+/***/ }),
+
+/***/ "./src/app/window-ref/window-ref.component.ts":
+/*!****************************************************!*\
+  !*** ./src/app/window-ref/window-ref.component.ts ***!
+  \****************************************************/
+/*! exports provided: WindowRefComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WindowRefComponent", function() { return WindowRefComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _hdms_shared_util_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @hdms/shared/util-core */ "../../libs/shared/util-core/src/index.ts");
+
+
+
+var WindowRefComponent = /** @class */ (function () {
+    function WindowRefComponent(windowRefService) {
+        this.windowRefService = windowRefService;
+    }
+    WindowRefComponent.prototype.ngOnInit = function () {
+        this._window = this.windowRefService.nativeWindow;
+    };
+    WindowRefComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'hdms-window-ref',
+            template: __webpack_require__(/*! ./window-ref.component.html */ "./src/app/window-ref/window-ref.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_hdms_shared_util_core__WEBPACK_IMPORTED_MODULE_2__["WindowRefService"]])
+    ], WindowRefComponent);
+    return WindowRefComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/window-ref/window-ref.module.ts":
+/*!*************************************************!*\
+  !*** ./src/app/window-ref/window-ref.module.ts ***!
+  \*************************************************/
+/*! exports provided: WindowRefModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WindowRefModule", function() { return WindowRefModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../../node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "../../node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "../../node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _window_ref_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./window-ref.component */ "./src/app/window-ref/window-ref.component.ts");
+
+
+
+
+var WindowRefModule = /** @class */ (function () {
+    function WindowRefModule() {
+    }
+    WindowRefModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+            declarations: [_window_ref_component__WEBPACK_IMPORTED_MODULE_3__["WindowRefComponent"]],
+            imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"]]
+        })
+    ], WindowRefModule);
+    return WindowRefModule;
 }());
 
 
@@ -1758,7 +3428,8 @@ __webpack_require__.r(__webpack_exports__);
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 var environment = {
-    production: false
+    production: false,
+    graphqlEndpoint: 'https://swapi.graph.cool/'
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -1806,7 +3477,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/mel/holng/dev/layout/hdms/apps/styleguide/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/mel/holng/dev/layout/hdms/apps/examples/src/main.ts */"./src/main.ts");
 
 
 /***/ })
