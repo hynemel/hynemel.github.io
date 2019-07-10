@@ -1,0 +1,12 @@
+{
+  "examples": {
+    "dummy": "Some German dummy text.",
+    "parameters": "Hallo {{name}} die aktuelle Uhrzeit ist {{time}}.",
+    "richtext": "Hallo <b>{{name}}</b> die aktuelle Uhrzeit ist {{time}}.",
+    "plural": "Da ist ein Ding.",
+    "plural_plural": "Da sind {{count}} Dinge.",
+    "gender": "Es ist da.",
+    "gender_male": "Er ist da.",
+    "gender_female": "Sie ist da."
+  }
+}
